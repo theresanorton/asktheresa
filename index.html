@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Ask Theresa</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
@@ -27,8 +27,9 @@
     --blue: #4A9EE8; --blue-light: #0A1A30;
   }
 }
-html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overscroll-behavior: none; }
-#app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; max-width: 760px; margin: 0 auto; }
+html { height: -webkit-fill-available; height: 100%; }
+body { height: 100%; height: -webkit-fill-available; font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overscroll-behavior: none; margin: 0; }
+#app { display: flex; flex-direction: column; height: 100%; height: -webkit-fill-available; max-width: 760px; margin: 0 auto; position: fixed; top: 0; left: 0; right: 0; bottom: 0; max-width: 760px; }
 
 /* HEADER */
 #header { padding: 14px 20px 0; background: var(--warm-white); flex-shrink: 0; border-bottom: 1px solid var(--border); }
@@ -44,7 +45,7 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
 .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
 
 /* PANELS */
-#panels { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+#panels { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; position: relative; }
 .panel { display: none; flex: 1; flex-direction: column; overflow: hidden; }
 .panel.active { display: flex; }
 
@@ -83,7 +84,7 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
 .tdots span:nth-child(2) { animation-delay: .2s; }
 .tdots span:nth-child(3) { animation-delay: .4s; }
 @keyframes td { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-4px);opacity:1} }
-#inputarea { padding: 10px 12px max(14px, env(safe-area-inset-bottom)); border-top: 1px solid var(--border); background: var(--warm-white); flex-shrink: 0; display: flex; gap: 8px; align-items: flex-end; position: sticky; bottom: 0; z-index: 10; }
+#inputarea { padding: 10px 12px max(14px, env(safe-area-inset-bottom)); border-top: 1px solid var(--border); background: var(--warm-white); flex-shrink: 0; display: flex; gap: 8px; align-items: flex-end; z-index: 10; }
 #inputbox { flex: 1; min-width: 0; padding: 8px 13px; font-size: 16px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border); border-radius: 18px; background: var(--cream); color: var(--ink); resize: none; outline: none; line-height: 1.5; max-height: 100px; transition: border-color .15s; -webkit-text-size-adjust: 100%; }
 #inputbox:focus { border-color: var(--accent); }
 #inputbox::placeholder { color: var(--muted); }
@@ -695,6 +696,38 @@ function renderChores() {
   const doneCount = CHORES.filter(c => done[c.id]).length;
   document.getElementById('chore-progress').style.width = Math.round(doneCount/total*100) + '%';
   document.getElementById('chore-label').textContent = `${doneCount} / ${total} done`;
+}
+
+// ── iOS KEYBOARD FIX ──────────────────────────────────────────────────────
+// iOS Safari shrinks the visual viewport when the keyboard opens.
+// We pin #app to the visual viewport height to keep the input always visible.
+function fixViewport() {
+  var app = document.getElementById('app');
+  if (window.visualViewport) {
+    var vv = window.visualViewport;
+    app.style.height = vv.height + 'px';
+    app.style.top = vv.offsetTop + 'px';
+    // scroll messages to bottom when keyboard opens
+    var msgs = document.getElementById('messages');
+    if (msgs) msgs.scrollTop = msgs.scrollHeight;
+  }
+}
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', fixViewport);
+  window.visualViewport.addEventListener('scroll', fixViewport);
+  fixViewport();
+}
+// Also fire on focus of input to catch keyboard open
+var inputEl2 = document.getElementById('inputbox');
+if (inputEl2) {
+  inputEl2.addEventListener('focus', function() {
+    setTimeout(fixViewport, 100);
+    setTimeout(fixViewport, 300);
+    setTimeout(fixViewport, 600);
+  });
+  inputEl2.addEventListener('blur', function() {
+    setTimeout(fixViewport, 100);
+  });
 }
 </script>
 </body>
