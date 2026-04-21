@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask Theresa</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream: #FAF7F2;
+  --warm-white: #FDF9F5;
+  --ink: #1C1714;
+  --ink-soft: #3D3530;
+  --muted: #9A8E87;
+  --border: #E8DDD4;
+  --accent: #B8714A;
+  --accent-light: #F7EDE4;
+  --accent-dark: #7A3E1E;
+  --teal: #3D7A6E;
+  --teal-light: #E8F4F2;
+  --bubble-bot: #FFFFFF;
+  --bubble-user: #2B2118;
+  --bubble-user-text: #F0E8DF;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cream: #1A1612;
+    --warm-white: #201C18;
+    --ink: #F2EBE3;
+    --ink-soft: #C9BDB4;
+    --muted: #7A6E68;
+    --border: #2E2720;
+    --accent: #C8855A;
+    --accent-light: #2A1E16;
+    --accent-dark: #E8A882;
+    --teal: #5AADA0;
+    --teal-light: #112320;
+    --bubble-bot: #252018;
+    --bubble-user: #3A2E24;
+    --bubble-user-text: #F0E8DF;
+  }
+}
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); }
+#app { display: flex; flex-direction: column; height: 100vh; max-width: 700px; margin: 0 auto; }
+
+/* HEADER */
+#header {
+  padding: 16px 22px 14px; border-bottom: 1px solid var(--border);
+  background: var(--warm-white); flex-shrink: 0;
+  display: flex; align-items: center; gap: 13px;
+}
+#avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--accent-light); border: 1.5px solid var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--accent-dark);
+  flex-shrink: 0;
+}
+#htext { flex: 1; }
+#hname { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--ink); line-height: 1.2; }
+#hsub { font-size: 11.5px; color: var(--muted); margin-top: 1px; font-weight: 300; }
+#dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 3px var(--teal-light); }
+
+/* CHIPS */
+#chips { padding: 10px 18px 0; flex-shrink: 0; background: var(--warm-white); border-bottom: 1px solid var(--border); }
+.chip-row { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 10px; align-items: center; }
+.chip-row::-webkit-scrollbar { display: none; }
+.chip-label { white-space: nowrap; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 500; flex-shrink: 0; padding-right: 2px; }
+.chip { white-space: nowrap; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border); font-size: 12px; font-family: 'DM Sans', sans-serif; color: var(--ink-soft); background: var(--cream); cursor: pointer; flex-shrink: 0; transition: all 0.15s; }
+.chip:hover { border-color: var(--accent); color: var(--accent-dark); background: var(--accent-light); }
+
+/* MESSAGES */
+#messages { flex: 1; overflow-y: auto; padding: 18px 18px 8px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; }
+#messages::-webkit-scrollbar { width: 3px; }
+#messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.mrow { display: flex; gap: 9px; align-items: flex-end; }
+.mrow.user { flex-direction: row-reverse; }
+.mav { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 11px; }
+.mrow.bot .mav { background: var(--accent-light); color: var(--accent-dark); border: 1px solid var(--accent); }
+.mrow.user .mav { background: var(--bubble-user); color: #BBA98E; }
+.bubble { max-width: 82%; padding: 10px 14px; font-size: 13.5px; line-height: 1.65; border-radius: 16px; }
+.mrow.bot .bubble { background: var(--bubble-bot); color: var(--ink); border: 1px solid var(--border); border-bottom-left-radius: 3px; }
+.mrow.user .bubble { background: var(--bubble-user); color: var(--bubble-user-text); border-bottom-right-radius: 3px; }
+.bubble b { font-weight: 500; }
+.bubble ul { padding-left: 16px; margin-top: 4px; }
+.bubble li { margin-bottom: 2px; }
+
+.tdots { display: flex; gap: 4px; padding: 4px 0; align-items: center; }
+.tdots span { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); animation: td 1.3s infinite; }
+.tdots span:nth-child(2) { animation-delay: .2s; }
+.tdots span:nth-child(3) { animation-delay: .4s; }
+@keyframes td { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-5px);opacity:1} }
+
+/* INPUT */
+#inputarea { padding: 12px 14px 16px; border-top: 1px solid var(--border); background: var(--warm-white); flex-shrink: 0; display: flex; gap: 9px; align-items: flex-end; }
+#inputbox { flex: 1; padding: 9px 14px; font-size: 13.5px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border); border-radius: 20px; background: var(--cream); color: var(--ink); resize: none; outline: none; line-height: 1.5; max-height: 110px; transition: border-color .15s; }
+#inputbox:focus { border-color: var(--accent); }
+#inputbox::placeholder { color: var(--muted); }
+#sendbtn { width: 38px; height: 38px; border-radius: 50%; background: var(--accent); border: none; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background .15s, transform .1s; }
+#sendbtn:hover { background: var(--accent-dark); }
+#sendbtn:active { transform: scale(.95); }
+#sendbtn svg { width: 15px; height: 15px; fill: white; margin-left: 2px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="header">
+    <div id="avatar">T</div>
+    <div id="htext">
+      <div id="hname">Ask Theresa</div>
+      <div id="hsub">All of Theresa's answers — so she doesn't have to repeat herself</div>
+    </div>
+    <div id="dot"></div>
+  </div>
+  <div id="chips">
+    <div class="chip-row">
+      <span class="chip-label">&#127968; House</span>
+      <div class="chip" onclick="ask('Where are the batteries?')">Batteries</div>
+      <div class="chip" onclick="ask('What is the WiFi password?')">WiFi password</div>
+      <div class="chip" onclick="ask('Where is the extra toilet paper?')">Toilet paper</div>
+      <div class="chip" onclick="ask('Where are cleaning supplies?')">Cleaning</div>
+      <div class="chip" onclick="ask('Where are the tools?')">Tools</div>
+      <div class="chip" onclick="ask('Where are important documents?')">Documents</div>
+      <div class="chip" onclick="ask('Where are the trash bags?')">Trash bags</div>
+      <div class="chip" onclick="ask('Where are the spare keys?')">Spare keys</div>
+    </div>
+    <div class="chip-row">
+      <span class="chip-label">&#127800; Theresa</span>
+      <div class="chip" onclick="ask('What should I order for Theresa at a restaurant?')">Food order</div>
+      <div class="chip" onclick="ask('What is Theresa coffee order?')">Coffee order</div>
+      <div class="chip" onclick="ask('What snacks does Theresa like?')">Snacks</div>
+      <div class="chip" onclick="ask('What does Theresa want for her birthday with budget options?')">Birthday gifts</div>
+      <div class="chip" onclick="ask('What movie should we watch tonight?')">Movie night</div>
+      <div class="chip" onclick="ask('What are Theresa favorite San Diego restaurants?')">Restaurants</div>
+      <div class="chip" onclick="ask('What do I get Theresa from 7-Eleven?')">7-Eleven run</div>
+    </div>
+    <div class="chip-row">
+      <span class="chip-label">&#128054; Dogs</span>
+      <div class="chip" onclick="ask('Where are the dog supplies?')">Dog supplies</div>
+      <div class="chip" onclick="ask('What is all the vet info for the dogs?')">Vet info</div>
+      <div class="chip" onclick="ask('What is the poison control number for pets?')">Poison control</div>
+      <div class="chip" onclick="ask('Where is the emergency vet?')">Emergency vet</div>
+    </div>
+    <div class="chip-row">
+      <span class="chip-label">&#128149; Date night</span>
+      <div class="chip" onclick="ask('What are good date night ideas?')">Date ideas</div>
+      <div class="chip" onclick="ask('What kind of dates does Theresa not enjoy?')">What to avoid</div>
+      <div class="chip" onclick="ask('What does a perfect low-key weekend look like?')">Low-key weekend</div>
+      <div class="chip" onclick="ask('What are Theresa bucket list trips?')">Bucket list</div>
+    </div>
+    <div class="chip-row">
+      <span class="chip-label">&#128106; Family</span>
+      <div class="chip" onclick="ask('Tell me about Theresa family.')">Norton family</div>
+      <div class="chip" onclick="ask('Tell me about Jason family.')">Murray family</div>
+      <div class="chip" onclick="ask('When are all the birthdays?')">Birthday calendar</div>
+    </div>
+    </div>
+  <div id="messages">
+    <div class="mrow bot">
+      <div class="mav">T</div>
+      <div class="bubble">Hey! I'm a bot with all of Theresa's answers so she doesn't have to repeat herself. Ask me anything — where things are around the house, gift ideas, her food order, date nights, and more. 💛</div>
+    </div>
+  </div>
+  <div id="inputarea">
+    <textarea id="inputbox" rows="1" placeholder="Ask anything about Theresa or the house..."></textarea>
+    <button id="sendbtn" onclick="handleSend()"><svg viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2z"/></svg></button>
+  </div>
+</div>
+
+<script>
+// ─── KNOWLEDGE BASE ────────────────────────────────────────────────────────
+const KB = [
+  // HOUSEHOLD
+  { tags:['batteries','battery'], q:'Where are the batteries?', a:'In the <b>junk drawer in the kitchen</b>.' },
+  { tags:['charger','chargers','cable','cables','cords','keyboard','electronics','ring charger'], q:'Where are chargers and cables?', a:'The Ring charger is in the <b>junk drawer</b>. Phone chargers are <b>next to the bed and each desk</b>. There\'s also an <b>electronics box in the laundry room</b> with extra cords, keyboards, etc.' },
+  { tags:['wifi','wi-fi','internet','password','network','router','lava lamp'], q:'What\'s the WiFi info?', a:'The router is in the <b>living room by the lava lamp</b>.<br>Network: <b>jdm123</b><br>Password: <b>mightyshoe186</b>' },
+  { tags:['remote','remotes','tv remote','television'], q:'Where are the TV remotes?', a:'In the <b>living room</b> — usually on the couch or on the side table.' },
+  { tags:['toilet paper','tp','bathroom','extra toilet'], q:'Where is the extra toilet paper?', a:'In the <b>bottom cabinet under the towels</b> in the bathroom.' },
+  { tags:['medicine','tylenol','advil','pain','ibuprofen','aspirin','meds','medication'], q:'Where is the medicine?', a:'In the <b>medicine drawer</b> or <b>medicine cabinet</b>. The first aid kit is in the <b>drawer below the medicine drawer</b>.' },
+  { tags:['bandaid','band-aid','bandaids','first aid','gauze'], q:'Where are bandaids and first aid supplies?', a:'In the <b>medicine drawer</b>.' },
+  { tags:['sunscreen','spf','sun screen'], q:'Where is the sunscreen?', a:'In the <b>basket above the toilet</b> or by the towels.' },
+  { tags:['shampoo','soap','toothpaste','deodorant','toiletries','extra toiletries','qtips','q-tips','cotton balls','toothbrush heads'], q:'Where are extra toiletries?', a:'<ul><li>Hand soap: <b>bottom cabinet by the toilet paper</b></li><li>Toothpaste: <b>medicine drawer</b></li><li>Deodorant: <b>medicine drawer or medicine cabinet</b></li><li>Toothbrush heads: <b>by the towels</b></li><li>Q-tips & cotton balls: <b>drawer with the first aid kit</b></li></ul>' },
+  { tags:['tape','scissors','stationery','pens','pen'], q:'Where is the tape, scissors, or pens?', a:'Tape and scissors are in the <b>junk drawer</b>. Pens are on the <b>refrigerator</b>.' },
+  { tags:['trash bags','garbage bags','trash bag'], q:'Where are the trash bags?', a:'In the <b>lazy Susan in the kitchen</b>.' },
+  { tags:['cleaning','cleaning supplies','sponge','sponges','ant traps','steam cleaner','floor cleaner'], q:'Where are cleaning supplies?', a:'Under the <b>kitchen sink</b> — sponges, ant traps, floor/steam cleaner supplies are all in there.' },
+  { tags:['plastic bags','reusable bags','grocery bags','tote'], q:'Where are plastic and reusable bags?', a:'In the <b>laundry room on the bags shelf</b>.' },
+  { tags:['candles','candle','lighter','lighters','matches'], q:'Where are candles and lighters?', a:'Lighters are on the <b>dining table</b>. Emergency and scented candles are in the <b>built-in</b>.' },
+  { tags:['paper towels','paper towel'], q:'Where are the extra paper towels?', a:'In the <b>laundry room on the top shelf</b>.' },
+  { tags:['hammer','screwdriver','tools','nails','pliers','wrench'], q:'Where are the tools?', a:'Indoor tools (small hammer, Phillips + flathead screwdriver, wall nails) are in the <b>junk drawer</b>. Pliers are in the <b>office craft drawers — second drawer from the top</b> in the jewelry/beading drawer. All other tools are in the <b>garage</b>.' },
+  { tags:['flashlight','emergency kit','emergency','lantern','emergency food','emergency backpack'], q:'Where is the flashlight and emergency kit?', a:'There\'s a lantern floating around. The <b>red emergency backpack</b> and emergency food supplies are in the <b>laundry room</b>.' },
+  { tags:['documents','passport','passports','marriage license','insurance','lease','safe'], q:'Where are important documents?', a:'The marriage license is in the <b>built-in in the plastic file folder</b>. Passports and other documents are in the <b>safe under the bed</b>.' },
+  { tags:['dog','dogs','dog food','data','marshall','leash','leashes','collar','poop bags','flea','treats','grooming','dog supplies','pet'], q:'Where are the dog supplies?', a:'<ul><li>Food: <b>on top of the dryer in the laundry room</b></li><li>Treat puzzles: <b>laundry room</b></li><li>Dog kitchen drawer: poop bags, flea meds, treats, lick pads</li><li>Grooming (toothbrushes, nail clippers, body mists): <b>built-in top drawer on the left</b></li><li>Wipes, leashes, collars: <b>shoe rack</b></li><li>Pet documents: <b>Theresa\'s desk</b></li></ul>' },
+  { tags:['detergent','laundry','dryer sheets','stain remover','washer'], q:'Where are laundry supplies?', a:'On top of the <b>washing machine</b>.' },
+  { tags:['spare key','spare keys','keys','key tray'], q:'Where are the spare keys?', a:'In the <b>key tray</b>.' },
+  { tags:['junk drawer'], q:'What\'s in the junk drawer?', a:'Batteries, tape, scissors, Ring charger, indoor tools (small hammer, screwdrivers, wall nails).' },
+
+  // FOOD & ORDERING
+  { tags:['order','food order','restaurant','decide','what to get','what to order','menu'], q:'What should I order for Theresa when she can\'t decide?', a:'Safe bets:<ul><li>Pepperoni pizza</li><li>Yellow curry</li><li>Turkey sandwich</li><li>BBQ pork banh mi</li><li>Steak frites</li><li>Gyro bowl (more salad than rice)</li></ul>' },
+  { tags:['coffee','coffee order','latte','iced coffee'], q:'What\'s Theresa\'s coffee order?', a:'<b>Small iced vanilla latte with oat milk.</b> She also loves iced Vietnamese coffee.' },
+  { tags:['snack','snacks','stocked','keep stocked'], q:'What snacks should I keep stocked for Theresa?', a:'<b>Crackers, salami, and cheese.</b> Hummus and carrots.' },
+  { tags:['7-eleven','7 eleven','711','convenience store'], q:'What should I get Theresa from 7-Eleven?', a:'Mango juice, coconut water, La Colombe coffee, or a boba drink.' },
+  { tags:['gas station','road trip','snacks road trip'], q:'What does Theresa want from a gas station on a road trip?', a:'Cool Ranch Doritos, beef jerky, and some kind of sweet treat.' },
+  { tags:['spicy','spice','heat'], q:'How spicy does Theresa like her food?', a:'<b>Mild kick</b> — a little spice is fine, but nothing too hot.' },
+  { tags:['cuisine','cuisines','food type','favorite food'], q:'What are Theresa\'s favorite cuisines?', a:'Italian, Japanese, Thai, Mediterranean, Vietnamese, Greek, French, and American comfort food. She\'ll try pretty much anything — except she\'s not a big fan of beans.' },
+  { tags:['restaurant','restaurants','san diego','where to eat','where should we eat'], q:'What are Theresa\'s favorite San Diego restaurants?', a:'Some favorites: <b>Bosforo, Wormwood, Pho Min, Sukho Thai, Sahara, Urban Plates, Et Voila, Dao Fu, Nood Bar, Pop Pie, Oscar\'s Mexican Seafood, Din Tai Fung, Haidilao Hot Pot, Snooze, Tender Greens, Ike\'s Love & Sandwiches, Better Buzz, Regents Pizzeria, Zia\'s Pizza, California English, Cantina Mayahuel, El Zarape, Plumeria, Grains, Marta, Pappalecco, Chris Ono Grinds, The Friendly, Little While, Fat Boy\'s, Bazille Nordstrom.</b><br><br>She loves local North Park spots and dislikes chains.<br><br><b>Not sure what is new?</b> Text <b>Vanessa or Alison</b> - they usually know if there is a new spot Theresa has been wanting to try.' },
+  { tags:['drink','drinks','alcohol','beer','wine'], q:'Does Theresa drink alcohol?', a:'Nope! She doesn\'t drink alcohol. Stick to still water, coffee, or the drinks above.' },
+
+  // GIFTS
+  { tags:['birthday','birthday gift','present','what to get her','wish list','gift ideas','gift','budget','how much','spend'], q:'What does Theresa want for her birthday?', a:'<b>Small gifts (under $30)</b><ul><li>Mello hair clip</li><li>Paris Cafe candle - Bath & Body Works (coffee scented)</li><li>Anything butter-themed (charm, hair clip, small jewelry)</li><li>Gardening supplies: windchimes, bird houses, gloves, seed packets</li><li>Blick gift card</li><li>Lululemon gift card</li></ul><b>Medium gifts ($30-$100)</b><ul><li>Lego set - check lego.com</li><li>Silver locket</li><li>Folklore cardigan</li><li>Korean head spa - text <b>Vanessa</b> for a rec</li><li>Gorjana or Mejuri jewelry</li><li>Escape room - text <b>Bubba</b> to make it a group thing</li><li>Concert or stand-up comedy tickets</li></ul><b>Big gifts ($100+)</b><ul><li>Spa day with facial - text <b>Vanessa or Alison</b> for a recommendation</li><li>Disneyland tickets - ask <b>Genalyn or Bianca</b> to come too</li><li>Weekend in Big Bear or Palm Springs</li><li>Outdoor storage bench</li><li>Backup camera & dash cam</li><li>Appointment with a color analyst</li><li>Lightroom + Lightroom classes</li><li>New dining table & chairs</li></ul><b>Stuck? Who to ask:</b><ul><li>Text <b>Vanessa</b> - knows her taste best</li><li>Text <b>Bubba</b> - good for group/experience ideas</li><li>Ask <b>Genalyn or Bianca</b> for recent wishlist intel</li><li>Ask <b>Linda or Terry</b> for a sentimental angle</li></ul><b>Where to shop:</b> Lego Store, Ulta, Sephora, Catbird, Gorjana, Mejuri, Lululemon, Blick, Etsy, Nordstrom, Joon Shop, Pigment, Madewell, Anthropologie.<br><b>Do NOT buy:</b> clothes or shoes.' },
+  { tags:['christmas','holiday','holiday gift','xmas'], q:'What does Theresa want for Christmas?', a:'Same as her birthday wish list! She also does <b>not</b> want more clothes or shoes.' },
+  { tags:['clothes','clothing','shoes','size','dress size','shoe size'], q:'What are Theresa\'s clothing and shoe sizes?', a:'She\'d <b>prefer not to receive clothes or shoes as gifts</b> — she\'s very picky about them. Get her an experience or something from the wish list instead.' },
+  { tags:['where to shop','shop','store','stores','buy gift'], q:'Where should I shop for Theresa\'s gifts?', a:'Great options: <b>Lego Store, Ulta, Sephora, Catbird, Gorjana, Mejuri, Lululemon, Blick, Etsy, Nordstrom, World Market, Joon Shop, Pigment, Madewell, Anthropologie.</b>' },
+  { tags:['experience','experiences','spa','facial','nails','concert'], q:'What kind of experience gifts does Theresa enjoy?', a:'Spa days, facials, nails, concerts, stand-up comedy shows, weekend trips to <b>Palm Springs, Santa Barbara, Big Bear, or Idyllwild</b>.<br><br><b>Planning it?</b><ul><li>Text <b>Vanessa</b> to ask if she knows a spa or facial place Theresa has mentioned</li><li>Text <b>Alison</b> for nail or beauty recs</li><li>For a trip, check with <b>Bubba or Genalyn</b> to make it a group trip</li></ul>' },
+
+  // DATE NIGHTS
+  { tags:['date night','date','date idea','what to do tonight','tonight'], q:'What are good date night ideas for Theresa?', a:'She loves: <b>dinner at Bosforo or Wormwood, bowling, movies, couples massages, concerts, escape rooms, the zoo,</b> and surprise/wild card experiences.<br><br><b>Need inspo?</b><ul><li>Text <b>Bubba</b> - sometimes has fun SD activity ideas</li><li>Check <b>Goldstar or Eventbrite</b> for concerts or comedy shows</li><li>Text <b>Vanessa or Alison</b> to ask if there is a new restaurant Theresa has been eyeing</li><li>Look up <b>escape rooms in San Diego</b></li></ul>' },
+  { tags:['date no','hates','dislike','avoid date','no date'], q:'What kinds of dates does Theresa NOT enjoy?', a:'Avoid: intense outdoor activities, sports, hiking, being in the sun too long, or beach days. Walks at <b>Balboa Park or Mission Bay</b> are fine — just nothing that involves getting sweaty.' },
+  { tags:['weekend','low key','chill weekend','lazy day'], q:'What does a perfect low-key weekend look like for Theresa?', a:'Estate sale in the morning → lunch somewhere local → walk in the park → movie at home. Or bowling. That\'s the dream.' },
+  { tags:['bucket list','travel','trip','trips','vacation'], q:'What are Theresa\'s bucket list trips?', a:'Japan, Italy, Scotland, New Zealand, Montreal. Road trip up the coast to Vancouver with the dogs. Also wants to visit Chicago, Seattle, Washington D.C., Portland. Road trip to Monterey.<br><br><b>Planning a surprise trip?</b> Text <b>Vanessa or Alison</b> to help plan - Theresa loves it more when friends are in the loop.' },
+
+  // ENTERTAINMENT
+  { tags:['movie','movies','film','films','watch','put on'], q:'What movie or show should I put on for Theresa?', a:'Safe bets: <b>Lord of the Rings, Stranger Things, The Office, Seinfeld, The Simpsons.</b><br><br>She also loves: Bob\'s Burgers, Rick and Morty, White Lotus, Sopranos, Six Feet Under, Curb Your Enthusiasm, I Think You Should Leave, The Rehearsal.' },
+  { tags:['streaming','hulu','netflix','hbo','prime','amc'], q:'What streaming services does Theresa have?', a:'Hulu, Netflix, Prime Video, HBO Max, and AMC+.' },
+  { tags:['book','books','author','authors','read','reading'], q:'What are Theresa\'s favorite books and authors?', a:'Favorite authors: <b>Grady Hendrix, Brom, Nat Cassidy, Lisa Jewell, Riley Sager, Paul Tremblay, David Sodergren,</b> and older Stephen King. She also loves books on women\'s rights and autobiographies.' },
+
+  // ABOUT THERESA
+  { tags:['about','who is','theresa','north park','neighborhood'], q:'Tell me about Theresa.', a:'Theresa is a product designer living in <b>North Park, San Diego</b>. She loves thrifting and estate sales, collecting vintage Pyrex, building Legos, embroidery, drawing and painting, and gardening (she grows edibles and milkweed for monarch butterflies). She\'s part Filipino and loves Filipino cuisine. Big fan of her two dogs, <b>Data</b> (young and active) and <b>Marshall</b> (older, limited mobility). Currently on a no-buy year — she only buys things she truly needs.' },
+  { tags:['hobbies','hobby','interests'], q:'What are Theresa\'s hobbies?', a:'Thrifting & estate sales, vintage Pyrex collecting, Lego building, embroidery, drawing & painting, gardening (edibles + milkweed for monarch caterpillars), writing, yoga, cycling, walking, reading horror/thriller.' },
+
+  // VET & PET EMERGENCY
+  { tags:['vet','veterinarian','regular vet','rancho mesa','animal hospital'], q:'Where do Data and Marshall go for regular vet care?', a:'Their regular vet is <b>Rancho Mesa Animal Hospital</b>.<br><a href="https://www.ranchomesaanimalhospital.com/" target="_blank">ranchomesaanimalhospital.com</a>' },
+  { tags:['urgent care','urgent vet','tell tail','telltail','sick dog'], q:'Where is the urgent care vet?', a:'For urgent (non-emergency) care: <b>Tell Tail Veterinary Urgent Care</b>.<br><a href="https://telltailvet.com/" target="_blank">telltailvet.com</a>' },
+  { tags:['emergency vet','emergency','vsh','sorrento','after hours vet'], q:'Where is the emergency vet?', a:'<b>Veterinary Specialty Hospital - Sorrento Valley</b>. Use this for after-hours or serious emergencies.' },
+  { tags:['poison','poisoned','poison control','aspca','ate something','toxic'], q:'What is the poison control number for pets?', a:'<b>ASPCA Animal Poison Control: (888) 426-4435</b><br>Available 24/7. There may be a consultation fee.' },
+  { tags:['vet info','all vets','vet list','pet emergency','dog emergency'], q:'What is all the vet info for the dogs?', a:'<b>Regular vet:</b> Rancho Mesa Animal Hospital - <a href="https://www.ranchomesaanimalhospital.com/" target="_blank">ranchomesaanimalhospital.com</a><br><b>Urgent care:</b> Tell Tail Vet - <a href="https://telltailvet.com/" target="_blank">telltailvet.com</a><br><b>Emergency:</b> Veterinary Specialty Hospital - Sorrento Valley<br><b>Poison control (24/7):</b> ASPCA - <b>(888) 426-4435</b>' },
+
+  // FAMILY
+  { tags:['family','norton family','theresa family','parents','mom','dad','linda','terry','brothers'], q:'Tell me about Theresa family.', a:'<b>Norton Family</b><ul><li><b>Mom:</b> Linda - Jan 7</li><li><b>Dad:</b> Terry - Feb 24</li><li><b>Oldest brother:</b> Herman (Kuya) - Mar 12. Married to Malu, Orange County. Kids: Genalyn (Apr 28) and Gianna/Gigi (Dec 26)</li><li><b>Second brother:</b> Henry (Bubba) - Jul 10. Married to Virginia (Ate V), Fort Worth. Kids: Drew (Feb 10) and Nick (Feb 27)</li><li>Theresa is the youngest - Nov 30</li></ul>' },
+  { tags:['murray family','jason family','in laws','jennifer','chuck','dave','karen','alison'], q:'Tell me about Jason family.', a:'<b>Murray Family</b><ul><li><b>Mom:</b> Jennifer (Momur) - Mar 4 & Mar 26</li><li><b>Dad:</b> Dave/Chuck Murray - Jan 14</li><li><b>Jason</b> - eldest - Sep 23</li><li><b>Karen</b> - sister - Apr 5. Married to Carl (Aug 21). Daughter: Isabella (Jul 23)</li><li><b>Alison</b> - sister - Jun 3. Married to Diego (Oct 24, son: Arthur)</li><li><b>Andrew/Drewball</b> - brother - Dec 6. Dating Robin (Jan 31)</li></ul>' },
+  { tags:['birthday','birthdays','when is birthday','birthday calendar','all birthdays'], q:'When are all the birthdays?', a:'<b>Birthday calendar:</b><ul><li>Jan 7 - Linda (mom)</li><li>Jan 14 - Dave Murray</li><li>Jan 17 - Julian (Kasia son)</li><li>Jan 31 - Robin (Andrew girlfriend)</li><li>Feb 7 - Tita Mhey</li><li>Feb 10 - Drew Norton (nephew)</li><li>Feb 24 - Terry (dad)</li><li>Feb 27 - Nick (nephew)</li><li>Mar 4 - Jennifer Murray</li><li>Mar 12 - Herman/Kuya</li><li>Mar 26 - Jennifer Murray</li><li>Apr 2 - Steven</li><li>Apr 5 - Karen Murray</li><li>Apr 25 - Kasia</li><li>Apr 28 - Genalyn</li><li>Apr 29 - Bianca</li><li>May 13 - Vanessa</li><li>May 19 - Virginia/Ate V</li><li>Jun 3 - Alison Murray</li><li>Jul 10 - Henry/Bubba</li><li>Jul 16 - Jasmine</li><li>Jul 23 - Isabella (Karen daughter)</li><li>Aug 21 - Carl (Karen husband)</li><li>Sep 17 - Leo</li><li>Sep 23 - Jason</li><li>Oct 10 - Katelin</li><li>Oct 11 - Ava</li><li>Oct 16 - Nhu (friend)</li><li>Oct 24 - Diego (Alison husband)</li><li>Nov 30 - Theresa!</li><li>Dec 6 - Drew Murray</li><li>Dec 12 - Malu</li><li>Dec 26 - Gianna/Gigi</li></ul>' },
+  { tags:['theresa birthday','november 30'], q:"When is Theresa birthday?", a:'<b>November 30!</b> Mark your calendar.' },
+  { tags:['jason birthday','september 23'], q:"When is Jason birthday?", a:"Jason's birthday is <b>September 23</b>." },
+  { tags:['herman','kuya'], q:'Who is Herman?', a:"Herman (Kuya) is Theresa's oldest brother. Birthday: March 12. Lives in Orange County with wife Malu (Dec 12) and kids Genalyn (Apr 28) and Gianna/Gigi (Dec 26)." },
+  { tags:['henry','bubba'], q:'Who is Henry or Bubba?', a:"Henry (Bubba) is Theresa's second brother. Birthday: July 10. Lives in Fort Worth with wife Virginia/Ate V (May 19) and kids Drew (Feb 10) and Nick (Feb 27)." },
+  { tags:['vanessa'], q:'Who is Vanessa?', a:"Vanessa is one of Theresa's closest friends. Birthday: May 13. She knows Theresa's taste really well - great person to text when planning gifts, spa days, or surprise outings." },
+  { tags:['alison murray','alison'], q:'Who is Alison?', a:"Alison is Jason's sister. Birthday: June 3. Married to Diego (Oct 24), who has a son named Arthur. Good person to text for beauty or nail recs for Theresa." },
+  { tags:['karen murray','karen'], q:'Who is Karen?', a:"Karen is Jason's sister. Birthday: April 5. Married to Carl (Aug 21), they have a daughter named Isabella (Jul 23)." },
+  { tags:['carl'], q:'Who is Carl?', a:"Carl is Karen Murray's husband. Birthday: August 21. They have a daughter named Isabella (Jul 23)." },
+  { tags:['isabella'], q:'Who is Isabella?', a:"Isabella is Karen and Carl's daughter. Birthday: July 23." },
+  { tags:['diego'], q:'Who is Diego?', a:"Diego is Alison Murray's husband. Birthday: October 24. He has a son named Arthur." },
+  { tags:['robin'], q:'Who is Robin?', a:"Robin is Andrew Murray's girlfriend. Birthday: January 31." },
+  { tags:['nhu'], q:'Who is Nhu?', a:"Nhu is one of Theresa's friends. Birthday: October 16. She has two kids: Leo (Sep 17) and Ava (Oct 11)." },
+  { tags:['kasia'], q:'Who is Kasia?', a:"Kasia is one of Theresa's friends. Birthday: April 25. Her son Julian's birthday is January 17." },
+];
+
+// ─── FUZZY SEARCH ──────────────────────────────────────────────────────────
+function findAnswer(input) {
+  const q = input.toLowerCase().trim();
+  let best = null, bestScore = 0;
+
+  for (const entry of KB) {
+    let score = 0;
+    // tag match
+    for (const tag of entry.tags) {
+      if (q.includes(tag)) score += tag.length * 2;
+    }
+    // question word overlap
+    const qWords = q.split(/\s+/);
+    const eWords = entry.q.toLowerCase().split(/\s+/);
+    for (const w of qWords) {
+      if (w.length > 3 && eWords.some(ew => ew.includes(w) || w.includes(ew))) score += 3;
+    }
+    if (score > bestScore) { bestScore = score; best = entry; }
+  }
+
+  if (bestScore >= 4) return best.a;
+
+  // fallback catch-alls
+  if (/where|find|located|location/.test(q)) return "Hmm, I don't have the exact location for that. Try checking the junk drawer, laundry room, built-in, or under the kitchen sink — those are Theresa's most common spots for things!";
+  if (/gift|present|buy|get her|want/.test(q)) return "Check out her wish list by asking <i>\"What does Theresa want for her birthday?\"</i> — it's got a full list plus where to shop.";
+  if (/eat|food|restaurant|dinner|lunch/.test(q)) return "Ask me <i>\"What should I order for Theresa?\"</i> or <i>\"What are her favorite restaurants?\"</i> for the full breakdown.";
+  return "I don't have that one in my knowledge base yet! Ask Theresa directly, or tap one of the quick chips above for the most common questions.";
+}
+
+// ─── CHAT UI ───────────────────────────────────────────────────────────────
+const msgs = document.getElementById('messages');
+const input = document.getElementById('inputbox');
+
+function scrollDown() { msgs.scrollTop = msgs.scrollHeight; }
+
+function addMsg(role, html) {
+  const row = document.createElement('div');
+  row.className = 'mrow ' + role;
+  const av = document.createElement('div');
+  av.className = 'mav';
+  av.textContent = role === 'bot' ? 'T' : 'Y';
+  const bub = document.createElement('div');
+  bub.className = 'bubble';
+  if (role === 'bot') bub.innerHTML = html; else bub.textContent = html;
+  row.appendChild(av); row.appendChild(bub);
+  msgs.appendChild(row); scrollDown();
+}
+
+function showTyping() {
+  const row = document.createElement('div');
+  row.className = 'mrow bot'; row.id = 'typing';
+  const av = document.createElement('div'); av.className = 'mav'; av.textContent = 'T';
+  const bub = document.createElement('div'); bub.className = 'bubble';
+  bub.innerHTML = '<div class="tdots"><span></span><span></span><span></span></div>';
+  row.appendChild(av); row.appendChild(bub); msgs.appendChild(row); scrollDown();
+}
+
+function ask(text) {
+  if (!text.trim()) return;
+  addMsg('user', text);
+  showTyping();
+  setTimeout(() => {
+    document.getElementById('typing')?.remove();
+    addMsg('bot', findAnswer(text));
+  }, 600 + Math.random() * 400);
+}
+
+function handleSend() {
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = 'auto';
+  ask(text);
+}
+
+input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
+input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 110) + 'px'; });
+</script>
+</body>
+</html>
