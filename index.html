@@ -14,6 +14,7 @@
   --bubble-bot: #FFFFFF; --bubble-user: #2B2118; --bubble-user-text: #F0E8DF;
   --green: #4A7C59; --green-light: #EAF2ED; --amber: #B87A20; --amber-light: #FDF3E0;
   --red: #B84040; --red-light: #FDEAEA; --purple: #6B5B9E; --purple-light: #F0EDF9;
+  --blue: #2E6DA4; --blue-light: #E8F1FA;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -23,42 +24,41 @@
     --bubble-bot: #252018; --bubble-user: #3A2E24; --bubble-user-text: #F0E8DF;
     --green: #5A9E6A; --green-light: #0F2418; --amber: #D4922A; --amber-light: #241A08;
     --red: #D45050; --red-light: #240E0E; --purple: #8B7BBE; --purple-light: #1A1628;
+    --blue: #5A9ED4; --blue-light: #0E1824;
   }
 }
 html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); }
 #app { display: flex; flex-direction: column; height: 100vh; max-width: 760px; margin: 0 auto; }
 
-/* ── HEADER ── */
-#header { padding: 14px 22px 0; background: var(--warm-white); flex-shrink: 0; border-bottom: 1px solid var(--border); }
+/* HEADER */
+#header { padding: 14px 20px 0; background: var(--warm-white); flex-shrink: 0; border-bottom: 1px solid var(--border); }
 #header-top { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; }
-#avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-light); border: 1.5px solid var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--accent-dark); flex-shrink: 0; }
+#avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-light); border: 1.5px solid var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--accent-dark); flex-shrink: 0; }
 #htext { flex: 1; }
-#hname { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--ink); line-height: 1.2; }
-#hsub { font-size: 11px; color: var(--muted); margin-top: 1px; font-weight: 300; }
+#hname { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--ink); line-height: 1.2; }
+#hsub { font-size: 11px; color: var(--muted); font-weight: 300; }
 #dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 3px var(--teal-light); }
-
-/* ── TABS ── */
-#tabs { display: flex; gap: 0; }
-.tab { padding: 10px 18px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
+#tabs { display: flex; }
+.tab { padding: 9px 16px; font-size: 13px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
 .tab:hover { color: var(--ink-soft); }
 .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
 
-/* ── PANELS ── */
+/* PANELS */
 #panels { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
 .panel { display: none; flex: 1; flex-direction: column; overflow: hidden; }
 .panel.active { display: flex; }
 
-/* ══════════════════════════════════════════════
-   CHAT TAB
-══════════════════════════════════════════════ */
-#chips { padding: 8px 16px 0; flex-shrink: 0; background: var(--warm-white); border-bottom: 1px solid var(--border); }
-.chip-row { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; padding-bottom: 8px; align-items: center; }
-.chip-row::-webkit-scrollbar { display: none; }
-.chip-label { white-space: nowrap; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 500; flex-shrink: 0; padding-right: 2px; }
-.chip { white-space: nowrap; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border); font-size: 12px; color: var(--ink-soft); background: var(--cream); cursor: pointer; flex-shrink: 0; transition: all 0.15s; }
-.chip:hover { border-color: var(--accent); color: var(--accent-dark); background: var(--accent-light); }
+/* ALERT BAR */
+#alert-bar { flex-shrink: 0; }
+.alert-item { padding: 9px 16px; font-size: 12.5px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+.alert-item.urgent { background: var(--red-light); color: var(--red); }
+.alert-item.soon { background: var(--amber-light); color: var(--amber); }
+.alert-item.info { background: var(--blue-light); color: var(--blue); }
+.alert-item span { flex: 1; line-height: 1.4; }
+.alert-item b { font-weight: 500; }
 
-#messages { flex: 1; overflow-y: auto; padding: 16px 16px 6px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+/* ══ CHAT ══ */
+#messages { flex: 1; overflow-y: auto; padding: 14px 14px 6px; display: flex; flex-direction: column; gap: 11px; scroll-behavior: smooth; }
 #messages::-webkit-scrollbar { width: 3px; }
 #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 .mrow { display: flex; gap: 8px; align-items: flex-end; }
@@ -66,13 +66,16 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
 .mav { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 10px; }
 .mrow.bot .mav { background: var(--accent-light); color: var(--accent-dark); border: 1px solid var(--accent); }
 .mrow.user .mav { background: var(--bubble-user); color: #BBA98E; }
-.bubble { max-width: 84%; padding: 9px 13px; font-size: 13px; line-height: 1.65; border-radius: 15px; }
+.bubble { max-width: 85%; padding: 9px 13px; font-size: 13px; line-height: 1.65; border-radius: 15px; }
 .mrow.bot .bubble { background: var(--bubble-bot); color: var(--ink); border: 1px solid var(--border); border-bottom-left-radius: 3px; }
 .mrow.user .bubble { background: var(--bubble-user); color: var(--bubble-user-text); border-bottom-right-radius: 3px; }
 .bubble b { font-weight: 500; }
-.bubble ul { padding-left: 15px; margin-top: 3px; }
-.bubble li { margin-bottom: 2px; }
+.bubble ul { padding-left: 15px; margin-top: 4px; }
+.bubble li { margin-bottom: 3px; }
 .bubble a { color: var(--accent); }
+.bubble .followup { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 5px; }
+.followup-btn { display: inline-block; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--border); font-size: 12px; color: var(--ink-soft); background: var(--cream); cursor: pointer; width: fit-content; transition: all 0.15s; }
+.followup-btn:hover { border-color: var(--accent); color: var(--accent-dark); background: var(--accent-light); }
 .tdots { display: flex; gap: 4px; padding: 3px 0; align-items: center; }
 .tdots span { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: td 1.3s infinite; }
 .tdots span:nth-child(2) { animation-delay: .2s; }
@@ -86,72 +89,66 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
 #sendbtn:hover { background: var(--accent-dark); }
 #sendbtn svg { width: 14px; height: 14px; fill: white; margin-left: 1px; }
 
-/* ══════════════════════════════════════════════
-   BIRTHDAY TAB
-══════════════════════════════════════════════ */
-#bday-panel { overflow-y: auto; padding: 16px; gap: 14px; }
-.alert-banner { border-radius: 10px; padding: 10px 14px; font-size: 13px; line-height: 1.5; display: flex; align-items: flex-start; gap: 10px; margin-bottom: 4px; }
-.alert-banner.urgent { background: var(--red-light); border: 1px solid var(--red); color: var(--red); }
-.alert-banner.soon { background: var(--amber-light); border: 1px solid var(--amber); color: var(--amber); }
-.alert-banner.upcoming { background: var(--green-light); border: 1px solid var(--green); color: var(--green); }
-.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-.alert-text { flex: 1; }
-.alert-text b { font-weight: 500; }
-
+/* ══ BIRTHDAY ══ */
+#bday-panel { overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 0; }
 .bday-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
 .bday-filter { padding: 5px 13px; border-radius: 999px; border: 1px solid var(--border); font-size: 12px; color: var(--muted); background: var(--cream); cursor: pointer; transition: all 0.15s; }
 .bday-filter:hover { border-color: var(--accent); color: var(--accent-dark); background: var(--accent-light); }
 .bday-filter.active { background: var(--accent); color: white; border-color: var(--accent); }
-
-.bday-month { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; margin: 14px 0 6px; }
-.bday-month:first-of-type { margin-top: 0; }
-.bday-card { display: flex; align-items: center; gap: 11px; padding: 9px 13px; background: var(--warm-white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 5px; }
+.bday-month-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; margin: 14px 0 6px; }
+.bday-month-label:first-child { margin-top: 0; }
+.bday-card { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: var(--warm-white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 5px; }
 .bday-card.is-today { border-color: var(--teal); background: var(--teal-light); }
 .bday-card.is-soon { border-color: var(--amber); }
-.bday-av { width: 32px; height: 32px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 12px; color: var(--accent-dark); flex-shrink: 0; border: 1px solid var(--accent); }
+.bday-av { width: 30px; height: 30px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-family: 'DM Serif Display', serif; font-size: 11px; color: var(--accent-dark); flex-shrink: 0; border: 1px solid var(--accent); }
 .bday-card.is-today .bday-av { background: var(--teal-light); color: var(--teal); border-color: var(--teal); }
-.bday-info { flex: 1; }
-.bday-name { font-size: 13.5px; font-weight: 500; color: var(--ink); }
-.bday-meta { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
-.bday-badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; flex-shrink: 0; font-weight: 500; }
-.badge-today { background: var(--teal-light); color: var(--teal); border: 1px solid var(--teal); }
-.badge-days { background: var(--cream); color: var(--muted); border: 1px solid var(--border); }
-.badge-soon { background: var(--amber-light); color: var(--amber); border: 1px solid var(--amber); }
+.bday-card.norton .bday-av { background: var(--purple-light); color: var(--purple); border-color: var(--purple); }
+.bday-card.murray .bday-av { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
+.bday-card.friends .bday-av { background: var(--green-light); color: var(--green); border-color: var(--green); }
+.bday-info { flex: 1; min-width: 0; }
+.bday-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+.bday-meta { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.bday-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.bday-family-tag { font-size: 10px; padding: 2px 7px; border-radius: 999px; font-weight: 500; }
+.tag-norton { background: var(--purple-light); color: var(--purple); }
+.tag-murray { background: var(--blue-light); color: var(--blue); }
+.tag-friends { background: var(--green-light); color: var(--green); }
+.bday-days { font-size: 11px; color: var(--muted); }
+.bday-days.soon { color: var(--amber); font-weight: 500; }
+.bday-days.today { color: var(--teal); font-weight: 500; }
+.bday-reminder { font-size: 11px; color: var(--amber); margin-top: 2px; font-style: italic; }
 
-/* ══════════════════════════════════════════════
-   CHORES TAB
-══════════════════════════════════════════════ */
-#chores-panel { overflow-y: auto; padding: 16px; gap: 0; }
-.chores-section { margin-bottom: 20px; }
-.chores-heading { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-.chores-heading::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-.chore-card { display: flex; align-items: center; gap: 11px; padding: 10px 13px; background: var(--warm-white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 5px; cursor: pointer; transition: all 0.15s; user-select: none; }
-.chore-card:hover { background: var(--cream); }
-.chore-card.done { opacity: 0.5; }
-.chore-card.done .chore-name { text-decoration: line-through; color: var(--muted); }
-.chore-check { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; background: var(--cream); }
-.chore-card.done .chore-check { background: var(--teal); border-color: var(--teal); }
-.chore-check svg { width: 10px; height: 10px; stroke: white; fill: none; stroke-width: 2.5; display: none; }
-.chore-card.done .chore-check svg { display: block; }
-.chore-info { flex: 1; }
-.chore-name { font-size: 13.5px; color: var(--ink); }
-.chore-freq { font-size: 11px; color: var(--muted); margin-top: 1px; }
-.chore-tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; flex-shrink: 0; }
-.tag-weekly { background: var(--purple-light); color: var(--purple); border: 1px solid var(--purple); }
-.tag-biweekly { background: var(--teal-light); color: var(--teal); border: 1px solid var(--teal); }
-.tag-monthly { background: var(--amber-light); color: var(--amber); border: 1px solid var(--amber); }
-.tag-asneeded { background: var(--cream); color: var(--muted); border: 1px solid var(--border); }
-.chores-reset { font-size: 12px; color: var(--muted); text-align: center; padding: 8px; cursor: pointer; }
-.chores-reset:hover { color: var(--accent); }
+/* ══ CHORES ══ */
+#chores-panel { overflow-y: auto; padding: 14px; }
 .progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .progress-bar-outer { flex: 1; height: 5px; background: var(--border); border-radius: 999px; overflow: hidden; }
 .progress-bar-inner { height: 100%; background: var(--teal); border-radius: 999px; transition: width 0.3s; }
 .progress-label { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.chores-section { margin-bottom: 18px; }
+.chores-heading { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; margin-bottom: 7px; display: flex; align-items: center; gap: 8px; }
+.chores-heading::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.chore-card { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: var(--warm-white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 5px; cursor: pointer; transition: all 0.15s; }
+.chore-card:hover { background: var(--cream); }
+.chore-card.done { opacity: 0.45; }
+.chore-card.done .chore-name { text-decoration: line-through; color: var(--muted); }
+.chore-check { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; background: var(--cream); margin-top: 1px; }
+.chore-card.done .chore-check { background: var(--teal); border-color: var(--teal); }
+.chore-check svg { width: 10px; height: 10px; stroke: white; fill: none; stroke-width: 2.5; display: none; }
+.chore-card.done .chore-check svg { display: block; }
+.chore-info { flex: 1; }
+.chore-name { font-size: 13px; color: var(--ink); font-weight: 500; }
+.chore-steps { font-size: 11.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+.chore-tag { font-size: 10px; padding: 2px 7px; border-radius: 999px; flex-shrink: 0; margin-top: 2px; }
+.tag-weekly { background: var(--purple-light); color: var(--purple); border: 1px solid var(--purple); }
+.tag-biweekly { background: var(--teal-light); color: var(--teal); border: 1px solid var(--teal); }
+.tag-monthly { background: var(--amber-light); color: var(--amber); border: 1px solid var(--amber); }
+.tag-asneeded { background: var(--cream); color: var(--muted); border: 1px solid var(--border); }
+.chores-reset { font-size: 12px; color: var(--muted); text-align: center; padding: 10px; cursor: pointer; }
+.chores-reset:hover { color: var(--accent); }
 </style>
 </head>
 <body>
 <div id="app">
-
   <div id="header">
     <div id="header-top">
       <div id="avatar">T</div>
@@ -168,57 +165,16 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
     </div>
   </div>
 
+  <div id="alert-bar"></div>
+
   <div id="panels">
 
-    <!-- ── CHAT PANEL ── -->
+    <!-- CHAT -->
     <div class="panel active" id="panel-chat">
-      <div id="chips">
-        <div class="chip-row">
-          <span class="chip-label">&#127968; House</span>
-          <div class="chip" onclick="askChat('Where are the batteries?')">Batteries</div>
-          <div class="chip" onclick="askChat('What is the WiFi password?')">WiFi password</div>
-          <div class="chip" onclick="askChat('Where is the extra toilet paper?')">Toilet paper</div>
-          <div class="chip" onclick="askChat('Where are cleaning supplies?')">Cleaning</div>
-          <div class="chip" onclick="askChat('Where are the tools?')">Tools</div>
-          <div class="chip" onclick="askChat('Where are important documents?')">Documents</div>
-          <div class="chip" onclick="askChat('Where are the trash bags?')">Trash bags</div>
-          <div class="chip" onclick="askChat('Where are the spare keys?')">Spare keys</div>
-        </div>
-        <div class="chip-row">
-          <span class="chip-label">&#127800; Theresa</span>
-          <div class="chip" onclick="askChat('What should I order for Theresa at a restaurant?')">Food order</div>
-          <div class="chip" onclick="askChat('What is Theresa coffee order?')">Coffee order</div>
-          <div class="chip" onclick="askChat('What snacks does Theresa like?')">Snacks</div>
-          <div class="chip" onclick="askChat('What does Theresa want for her birthday with budget options?')">Birthday gifts</div>
-          <div class="chip" onclick="askChat('What movie should we watch tonight?')">Movie night</div>
-          <div class="chip" onclick="askChat('What are Theresa favorite San Diego restaurants?')">Restaurants</div>
-          <div class="chip" onclick="askChat('What do I get Theresa from 7-Eleven?')">7-Eleven run</div>
-        </div>
-        <div class="chip-row">
-          <span class="chip-label">&#128054; Dogs</span>
-          <div class="chip" onclick="askChat('Where are the dog supplies?')">Dog supplies</div>
-          <div class="chip" onclick="askChat('What is all the vet info for the dogs?')">Vet info</div>
-          <div class="chip" onclick="askChat('What is the poison control number for pets?')">Poison control</div>
-          <div class="chip" onclick="askChat('Where is the emergency vet?')">Emergency vet</div>
-        </div>
-        <div class="chip-row">
-          <span class="chip-label">&#128149; Date night</span>
-          <div class="chip" onclick="askChat('What are good date night ideas?')">Date ideas</div>
-          <div class="chip" onclick="askChat('What kind of dates does Theresa not enjoy?')">What to avoid</div>
-          <div class="chip" onclick="askChat('What does a perfect low-key weekend look like?')">Low-key weekend</div>
-          <div class="chip" onclick="askChat('What are Theresa bucket list trips?')">Bucket list</div>
-        </div>
-        <div class="chip-row">
-          <span class="chip-label">&#128106; Family</span>
-          <div class="chip" onclick="askChat('Tell me about Theresa family.')">Norton family</div>
-          <div class="chip" onclick="askChat('Tell me about Jason family.')">Murray family</div>
-          <div class="chip" onclick="switchTab('bday')">Birthday calendar &#8594;</div>
-        </div>
-      </div>
       <div id="messages">
         <div class="mrow bot">
           <div class="mav">T</div>
-          <div class="bubble">Hey! I'm a bot with all of Theresa's answers so she doesn't have to repeat herself. Ask me anything — where things are around the house, gift ideas, her food order, date nights, and more. Check the tabs above for the birthday calendar and chore tracker too!</div>
+          <div class="bubble">Hey! I'm a bot with all of Theresa's answers. Ask me anything — where things are around the house, gift ideas, her food order, date nights, dog stuff, and more. Check the tabs above for the birthday calendar and chore tracker too!</div>
         </div>
       </div>
       <div id="inputarea">
@@ -227,21 +183,20 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
       </div>
     </div>
 
-    <!-- ── BIRTHDAY PANEL ── -->
+    <!-- BIRTHDAYS -->
     <div class="panel" id="panel-bday">
       <div id="bday-panel">
-        <div id="bday-alerts"></div>
         <div class="bday-filters">
-          <div class="bday-filter active" onclick="filterBday('all', this)">Everyone</div>
-          <div class="bday-filter" onclick="filterBday('norton', this)">Norton family</div>
-          <div class="bday-filter" onclick="filterBday('murray', this)">Murray family</div>
-          <div class="bday-filter" onclick="filterBday('friends', this)">Friends</div>
+          <div class="bday-filter active" onclick="filterBday('all',this)">Everyone</div>
+          <div class="bday-filter" onclick="filterBday('norton',this)">Norton family</div>
+          <div class="bday-filter" onclick="filterBday('murray',this)">Murray family</div>
+          <div class="bday-filter" onclick="filterBday('friends',this)">Friends</div>
         </div>
         <div id="bday-list"></div>
       </div>
     </div>
 
-    <!-- ── CHORES PANEL ── -->
+    <!-- CHORES -->
     <div class="panel" id="panel-chores">
       <div id="chores-panel">
         <div class="progress-row">
@@ -255,15 +210,13 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
 
   </div>
 </div>
-
 <script>
-// ══════════════════════════════════════════════
-// TAB SWITCHING
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
+// TABS
+// ══════════════════════════════════════
 function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((t,i) => {
-    const names = ['chat','bday','chores'];
-    t.classList.toggle('active', names[i] === name);
+  ['chat','bday','chores'].forEach((n,i) => {
+    document.querySelectorAll('.tab')[i].classList.toggle('active', n === name);
   });
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
@@ -271,131 +224,295 @@ function switchTab(name) {
   if (name === 'chores') renderChores();
 }
 
-// ══════════════════════════════════════════════
-// KNOWLEDGE BASE
-// ══════════════════════════════════════════════
-const KB = [
-  { tags:['batteries','battery'], a:'In the <b>junk drawer in the kitchen</b>.' },
-  { tags:['charger','chargers','cable','cables','cords','keyboard','electronics','ring charger'], a:'Ring charger is in the <b>junk drawer</b>. Phone chargers are <b>next to the bed and each desk</b>. Electronics box in the <b>laundry room</b> has extra cords, keyboards, etc.' },
-  { tags:['wifi','wi-fi','internet','password','network','router','lava lamp'], a:'Router is in the <b>living room by the lava lamp</b>.<br>Network: <b>jdm123</b> / Password: <b>mightyshoe186</b>' },
-  { tags:['remote','remotes','tv remote'], a:'In the <b>living room</b> — usually on the couch or on the side table.' },
-  { tags:['toilet paper','tp','extra toilet'], a:'In the <b>bottom cabinet under the towels</b> in the bathroom.' },
-  { tags:['medicine','tylenol','advil','pain','meds','medication'], a:'In the <b>medicine drawer</b> or <b>medicine cabinet</b>. First aid kit is in the <b>drawer below the medicine drawer</b>.' },
-  { tags:['bandaid','band-aid','bandaids','first aid'], a:'In the <b>medicine drawer</b>.' },
-  { tags:['sunscreen','spf'], a:'In the <b>basket above the toilet</b> or by the towels.' },
-  { tags:['shampoo','soap','toothpaste','deodorant','toiletries','qtips','cotton balls','toothbrush heads'], a:'Hand soap: <b>bottom cabinet by the TP</b>. Toothpaste + deodorant: <b>medicine drawer</b>. Toothbrush heads: <b>by the towels</b>. Q-tips & cotton balls: <b>drawer with first aid kit</b>.' },
-  { tags:['tape','scissors','stationery','pens'], a:'Tape and scissors in the <b>junk drawer</b>. Pens on the <b>refrigerator</b>.' },
-  { tags:['trash bags','garbage bags'], a:'In the <b>lazy Susan in the kitchen</b>.' },
-  { tags:['cleaning','cleaning supplies','sponge','ant traps','steam cleaner'], a:'Under the <b>kitchen sink</b> — sponges, ant traps, floor/steam cleaner supplies.' },
-  { tags:['plastic bags','reusable bags','grocery bags'], a:'In the <b>laundry room on the bags shelf</b>.' },
-  { tags:['candles','candle','lighter','lighters','matches'], a:'Lighters on the <b>dining table</b>. Emergency and scented candles in the <b>built-in</b>.' },
-  { tags:['paper towels','paper towel'], a:'In the <b>laundry room on the top shelf</b>.' },
-  { tags:['hammer','screwdriver','tools','nails','pliers'], a:'Indoor tools (hammer, screwdrivers, nails) in the <b>junk drawer</b>. Pliers in the <b>office craft drawers — 2nd drawer, jewelry section</b>. All other tools in the <b>garage</b>.' },
-  { tags:['flashlight','emergency kit','lantern','emergency food','emergency backpack'], a:'Lantern is floating around somewhere. <b>Red emergency backpack</b> and food supplies are in the <b>laundry room</b>.' },
-  { tags:['documents','passport','passports','marriage license','insurance','safe'], a:'Marriage license in the <b>built-in plastic file folder</b>. Passports and other documents in the <b>safe under the bed</b>.' },
-  { tags:['dog','dogs','dog food','data','marshall','leash','collar','poop bags','flea','treats','grooming','dog supplies','pet'], a:'<ul><li>Food: <b>on top of dryer, laundry room</b></li><li>Dog kitchen drawer: poop bags, flea meds, treats, lick pads</li><li>Grooming (toothbrushes, nail clippers, body mists): <b>built-in top drawer on the left</b></li><li>Wipes, leashes, collars: <b>shoe rack</b></li><li>Treat puzzles: <b>laundry room</b></li><li>Pet documents: <b>Theresa\'s desk</b></li></ul>' },
-  { tags:['detergent','laundry','dryer sheets','stain remover'], a:'On top of the <b>washing machine</b>.' },
-  { tags:['spare key','spare keys','key tray'], a:'In the <b>key tray</b>.' },
-  { tags:['junk drawer'], a:'Batteries, tape, scissors, Ring charger, small hammer, screwdrivers, wall nails.' },
-  { tags:['order','food order','restaurant order','what to get','what to order','decide'], a:'Safe bets:<ul><li>Pepperoni pizza</li><li>Yellow curry</li><li>Turkey sandwich</li><li>BBQ pork banh mi</li><li>Steak frites</li><li>Gyro bowl (more salad than rice)</li></ul>' },
-  { tags:['coffee','coffee order','latte','iced coffee'], a:'<b>Small iced vanilla latte with oat milk.</b> Also loves iced Vietnamese coffee.' },
-  { tags:['snack','snacks','keep stocked'], a:'<b>Crackers, salami, and cheese.</b> Hummus and carrots.' },
-  { tags:['7-eleven','7 eleven','711'], a:'Mango juice, coconut water, La Colombe coffee, or a boba drink.' },
-  { tags:['gas station','road trip snacks'], a:'Cool Ranch Doritos, beef jerky, and some kind of sweet treat.' },
-  { tags:['spicy','spice'], a:'<b>Mild kick</b> — a little spice is fine but nothing too hot.' },
-  { tags:['cuisine','cuisines','favorite food'], a:'Italian, Japanese, Thai, Mediterranean, Vietnamese, Greek, French, and American comfort food. Not a big fan of beans.' },
-  { tags:['restaurant','restaurants','san diego','where to eat'], a:'Favorites: <b>Bosforo, Wormwood, Pho Min, Sukho Thai, Sahara, Urban Plates, Et Voila, Dao Fu, Nood Bar, Pop Pie, Oscar\'s Mexican Seafood, Din Tai Fung, Haidilao Hot Pot, Snooze, Tender Greens, Ike\'s, Better Buzz, Regents Pizzeria, Zia\'s Pizza, California English, Cantina Mayahuel, El Zarape, Plumeria, Grains, Marta, Pappalecco, The Friendly, Little While, Fat Boy\'s.</b><br><br>Text <b>Vanessa or Kasia</b> for what\'s new.' },
-  { tags:['drink','drinks','alcohol','beer','wine'], a:'She does not drink alcohol. Stick to still water or coffee.' },
-  { tags:['birthday','birthday gift','present','gift ideas','gift','budget','spend'], a:'<b>Under $30:</b> Mello hair clip, Paris Cafe candle (Bath & Body Works), butter-themed charm/jewelry, gardening supplies, Blick or Lululemon gift card.<br><br><b>$30-$100:</b> Lego set, silver locket, Folklore cardigan, Korean head spa (text <b>Vanessa</b> for a rec), Gorjana/Mejuri jewelry, escape room (text <b>Bubba</b> to make it a group thing), concert tickets.<br><br><b>$100+:</b> Spa day with facial (text <b>Vanessa or Alison</b>), Disneyland tickets (ask <b>Genalyn or Bianca</b> to join), Big Bear or Palm Springs weekend, outdoor storage bench, backup camera & dash cam, color analyst appointment, Lightroom classes, new dining table & chairs.<br><br><b>Stuck? Ask:</b> Vanessa (knows her taste best), Bubba (group ideas), Genalyn or Bianca (wishlist intel), Linda or Terry (sentimental angle).<br><b>Shop at:</b> Lego, Ulta, Sephora, Catbird, Gorjana, Mejuri, Lululemon, Blick, Etsy, Nordstrom, Joon Shop, Pigment, Madewell, Anthropologie.<br><b>Never:</b> clothes or shoes.' },
-  { tags:['christmas','holiday','xmas'], a:'Same as birthday wish list! Never clothes or shoes.' },
-  { tags:['experience','spa','facial','nails','concert'], a:'Spa days, facials, nails, concerts, stand-up comedy, weekends in Palm Springs, Santa Barbara, Big Bear, or Idyllwild.<br><br>Text <b>Vanessa</b> for spa recs, <b>Alison</b> for nail/beauty recs.' },
-  { tags:['date night','date idea','tonight'], a:'Loves: <b>Bosforo or Wormwood dinner, bowling, movies, couples massages, concerts, escape rooms, the zoo.</b><br><br>Check <b>Goldstar or Eventbrite</b> for events. Text <b>Vanessa or Alison</b> for new restaurant recs.' },
-  { tags:['avoid','not enjoy','bad date','hates'], a:'Avoid: intense outdoor activities, sports, hiking, too much sun, beach days. Walks at Balboa Park or Mission Bay are fine — just nothing sweaty.' },
-  { tags:['weekend','low key','lazy day'], a:'Estate sale in the morning, lunch nearby, walk in the park, movie at home. Or bowling.<br><br>Check <b>estatesales.net</b> the night before. Text <b>Vanessa or Genalyn</b> to join.' },
-  { tags:['bucket list','trip','vacation','travel'], a:'Japan, Italy, Scotland, New Zealand, Montreal. Road trip to Vancouver with the dogs. Also: Chicago, Seattle, D.C., Portland, Monterey.<br><br>Text <b>Vanessa or Alison</b> to help plan surprise trips.' },
-  { tags:['movie','film','watch','put on'], a:'Safe bets: <b>Lord of the Rings, Stranger Things, The Office, Seinfeld, The Simpsons.</b><br>Also loves: Bob\'s Burgers, White Lotus, Sopranos, Six Feet Under, Curb Your Enthusiasm, Rick and Morty, I Think You Should Leave.' },
-  { tags:['streaming','hulu','netflix','hbo','prime','amc'], a:'Hulu, Netflix, Prime Video, HBO Max, and AMC+.' },
-  { tags:['book','author','reading'], a:'Loves: Grady Hendrix, Brom, Nat Cassidy, Lisa Jewell, Riley Sager, Paul Tremblay, David Sodergren, older Stephen King. Also reads women\'s rights books and autobiographies.' },
-  { tags:['about','who is theresa','north park'], a:'Product designer in <b>North Park, San Diego</b>. Loves thrifting/estate sales, vintage Pyrex, Lego, embroidery, drawing, gardening (edibles + milkweed for monarchs). Part Filipino, loves Filipino food. On a no-buy year. Dog mom to Data and Marshall.' },
-  { tags:['hobbies','hobby','interests'], a:'Thrifting, vintage Pyrex collecting, Lego building, embroidery, drawing & painting, gardening, writing, yoga, cycling, walking, reading horror/thriller.' },
-  { tags:['vet','veterinarian','rancho mesa','regular vet'], a:'Regular vet: <b>Rancho Mesa Animal Hospital</b> - <a href="https://www.ranchomesaanimalhospital.com/" target="_blank">ranchomesaanimalhospital.com</a>' },
-  { tags:['urgent care','urgent vet','tell tail'], a:'Urgent (non-emergency): <b>Tell Tail Veterinary Urgent Care</b> - <a href="https://telltailvet.com/" target="_blank">telltailvet.com</a>' },
-  { tags:['emergency vet','emergency','vsh','sorrento'], a:'<b>Veterinary Specialty Hospital - Sorrento Valley.</b> For after-hours or serious emergencies.' },
-  { tags:['poison','poisoned','aspca','toxic'], a:'<b>ASPCA Animal Poison Control: (888) 426-4435</b> — Available 24/7.' },
-  { tags:['vet info','all vets','pet emergency'], a:'<b>Regular:</b> Rancho Mesa Animal Hospital<br><b>Urgent:</b> Tell Tail Vet<br><b>Emergency:</b> Veterinary Specialty Hospital - Sorrento Valley<br><b>Poison control 24/7:</b> ASPCA (888) 426-4435' },
-  { tags:['family','norton family','theresa family','mom','dad','linda','terry','brothers'], a:'<b>Norton Family:</b><ul><li>Mom: Linda (Jan 7)</li><li>Dad: Terry (Feb 24)</li><li>Herman/Kuya (Mar 12) - Married to Malu, Orange County. Kids: Genalyn (Apr 28), Gianna/Gigi (Dec 26)</li><li>Henry/Bubba (Jul 10) - Married to Virginia/Ate V, Fort Worth. Kids: Drew (Feb 10), Nick (Feb 27)</li><li>Theresa - youngest (Nov 30)</li></ul>' },
-  { tags:['murray family','jason family','in laws','jennifer','karen','alison'], a:'<b>Murray Family:</b><ul><li>Mom: Jennifer/Momur (Mar 4)</li><li>Dad: Dave/Chuck (Jan 14)</li><li>Jason - eldest (Sep 23)</li><li>Karen (Apr 5) - Married to Carl (Aug 21). Daughter: Isabella (Jul 23)</li><li>Alison (Jun 3) - Married to Diego (Oct 24). Diego\'s son: Arthur</li><li>Andrew/Drewball (Dec 6) - Dating Robin (Jan 31)</li></ul>' },
-  { tags:['birthday','birthdays','birthday calendar','all birthdays'], a:'<b>All birthdays:</b> Jan 7 Linda, Jan 14 Dave Murray, Jan 17 Julian, Jan 31 Robin, Feb 7 Tita Mhey, Feb 10 Drew Norton, Feb 24 Terry, Feb 27 Nick, Mar 4 Jennifer Murray, Mar 12 Herman, Apr 2 Steven, Apr 5 Karen, Apr 25 Kasia, Apr 28 Genalyn, Apr 29 Bianca, May 13 Vanessa, May 19 Virginia, Jun 3 Alison, Jul 10 Henry, Jul 16 Jasmine, Jul 23 Isabella, Aug 21 Carl, Sep 17 Leo, Sep 23 Jason, Oct 10 Katelin, Oct 11 Ava, Oct 16 Nhu, Oct 24 Diego, Nov 30 Theresa, Dec 6 Drew Murray, Dec 12 Malu, Dec 26 Gianna.' },
-  { tags:['herman','kuya'], a:'Herman (Kuya) is Theresa\'s oldest brother. Mar 12. Orange County with wife Malu (Dec 12) and kids Genalyn (Apr 28) and Gianna/Gigi (Dec 26).' },
-  { tags:['henry','bubba'], a:'Henry (Bubba) is Theresa\'s second brother. Jul 10. Fort Worth with wife Virginia/Ate V (May 19) and kids Drew (Feb 10) and Nick (Feb 27).' },
-  { tags:['vanessa'], a:'Vanessa is one of Theresa\'s closest friends. Birthday: May 13. Best person to text when planning gifts, spa days, or outings.' },
-  { tags:['alison'], a:'Alison is Jason\'s sister. Jun 3. Married to Diego (Oct 24, son Arthur).' },
-  { tags:['karen'], a:'Karen is Jason\'s sister. Apr 5. Married to Carl (Aug 21), daughter Isabella (Jul 23).' },
-  { tags:['carl'], a:'Carl is Karen\'s husband. Birthday: August 21. Daughter: Isabella (Jul 23).' },
-  { tags:['isabella'], a:'Isabella is Karen and Carl\'s daughter. Birthday: July 23.' },
-  { tags:['diego'], a:'Diego is Alison\'s husband. Birthday: October 24. Has a son named Arthur.' },
-  { tags:['robin'], a:'Robin is Andrew Murray\'s girlfriend. Birthday: January 31.' },
-  { tags:['nhu'], a:'Nhu is one of Theresa\'s friends. Birthday: October 16. Kids: Leo (Sep 17) and Ava (Oct 11).' },
-  { tags:['kasia'], a:'Kasia is one of Theresa\'s friends. Birthday: April 25. Son Julian\'s birthday is January 17.' },
+// ══════════════════════════════════════
+// ALERTS (shown on main header always)
+// ══════════════════════════════════════
+const SPECIAL_EVENTS = [
+  { name:"Valentine's Day", month:2, day:14, type:'info' },
+  { name:"Tax Day", month:4, day:15, type:'info' },
+  { name:"Mother's Day", month:5, day:11, type:'info', note:'Second Sunday of May' },
+  { name:"Theresa & Jason's Anniversary", month:4, day:20, type:'urgent' },
+  { name:"Father's Day", month:6, day:15, type:'info', note:'Third Sunday of June' },
+  { name:"Data's Birthday", month:10, day:26, type:'info' },
+  { name:"Marshall's Birthday", month:6, day:15, type:'info' },
+  { name:"Theresa's Birthday", month:11, day:30, type:'urgent' },
+  { name:"Christmas", month:12, day:25, type:'info' },
+  { name:"New Year's Eve", month:12, day:31, type:'info' },
+];
+const FAMILY_BDAYS_FOR_ALERT = [
+  { name:'Linda (Theresa\'s mom)', month:1, day:7 },
+  { name:'Dave Murray', month:1, day:14 },
+  { name:'Robin', month:1, day:31 },
+  { name:'Andrew Murray', month:2, day:10 },
+  { name:'Terry (Theresa\'s dad)', month:2, day:24 },
+  { name:'Nick', month:2, day:27 },
+  { name:'Jennifer Murray', month:3, day:4 },
+  { name:'Herman / Kuya', month:3, day:12 },
+  { name:'Karen Murray', month:4, day:5 },
+  { name:'Genalyn', month:4, day:28 },
+  { name:'Virginia / Ate V', month:5, day:19 },
+  { name:'Alison Murray', month:6, day:3 },
+  { name:'Henry / Bubba', month:7, day:10 },
+  { name:'Isabella', month:7, day:23 },
+  { name:'Carl', month:8, day:21 },
+  { name:'Jason', month:9, day:23 },
+  { name:'Diego', month:10, day:24 },
+  { name:'Drew Norton', month:12, day:6 },
+  { name:'Malu', month:12, day:12 },
+  { name:'Gianna / Gigi', month:12, day:26 },
 ];
 
-// ══════════════════════════════════════════════
+function getDaysUntil(month, day) {
+  const today = new Date();
+  let next = new Date(today.getFullYear(), month - 1, day);
+  if (next.toDateString() === today.toDateString()) return 0;
+  if (next < today) next = new Date(today.getFullYear() + 1, month - 1, day);
+  return Math.ceil((next - today) / 86400000);
+}
+
+function buildAlerts() {
+  const bar = document.getElementById('alert-bar');
+  bar.innerHTML = '';
+  const items = [];
+  [...SPECIAL_EVENTS, ...FAMILY_BDAYS_FOR_ALERT.map(b => ({...b, type:'soon', isFamily:true}))].forEach(e => {
+    const d = getDaysUntil(e.month, e.day);
+    if (d <= 5) items.push({...e, d});
+  });
+  items.sort((a,b) => a.d - b.d).slice(0, 3).forEach(e => {
+    const div = document.createElement('div');
+    const cls = e.d === 0 ? 'urgent' : e.d <= 2 ? 'soon' : 'info';
+    div.className = 'alert-item ' + cls;
+    const icon = e.d === 0 ? '&#127881;' : e.d <= 2 ? '&#9201;' : '&#128197;';
+    const msg = e.d === 0
+      ? `Today is <b>${e.name}!</b>`
+      : e.d === 1 ? `<b>${e.name}</b> is tomorrow!`
+      : `<b>${e.name}</b> is in ${e.d} days`;
+    div.innerHTML = `<span style="font-size:14px">${icon}</span><span>${msg}</span>`;
+    bar.appendChild(div);
+  });
+}
+buildAlerts();
+
+// ══════════════════════════════════════
+// CHAT KNOWLEDGE BASE
+// ══════════════════════════════════════
+const KB = [
+  { tags:['batteries','battery'], a:'In the <b>junk drawer in the kitchen</b>.' },
+  { tags:['charger','chargers','cable','cables','cords','ring charger'], a:'Ring charger: <b>junk drawer</b>. Phone chargers: <b>next to the bed and each desk</b>. Extra cords/keyboards: <b>electronics box in the laundry room</b>.' },
+  { tags:['wifi','wi-fi','internet','password','network','router'], a:'Router is in the <b>living room by the lava lamp</b>.<br>Network: <b>jdm123</b> / Password: <b>mightyshoe186</b>' },
+  { tags:['remote','remotes','tv remote'], a:'In the <b>living room</b> — usually on the couch or the side table.' },
+  { tags:['toilet paper','tp'], a:'In the <b>bottom cabinet under the towels</b>.' },
+  { tags:['medicine','tylenol','advil','pain','meds'], a:'In the <b>medicine drawer</b> or <b>medicine cabinet</b>. First aid kit is in the <b>drawer below the medicine drawer</b>.' },
+  { tags:['bandaid','first aid','gauze'], a:'In the <b>medicine drawer</b>.' },
+  { tags:['sunscreen','spf'], a:'In the <b>basket above the toilet</b> or by the towels.' },
+  { tags:['shampoo','soap','toothpaste','deodorant','toiletries','qtips','cotton'], a:'Hand soap: <b>bottom cabinet by TP</b>. Toothpaste + deodorant: <b>medicine drawer</b>. Toothbrush heads: <b>by the towels</b>. Q-tips/cotton balls: <b>drawer with first aid kit</b>.' },
+  { tags:['tape','scissors','pens','stationery'], a:'Tape and scissors in the <b>junk drawer</b>. Pens on the <b>refrigerator</b>.' },
+  { tags:['trash bags','garbage bags'], a:'In the <b>lazy Susan in the kitchen</b>.' },
+  { tags:['cleaning','cleaning supplies','sponge','ant'], a:'Under the <b>kitchen sink</b> — sponges, ant traps, floor/steam cleaner supplies.' },
+  { tags:['plastic bags','reusable bags','grocery bags'], a:'In the <b>laundry room on the bags shelf</b>.' },
+  { tags:['candles','lighter','lighters','matches'], a:'Lighters on the <b>dining table</b>. Emergency and scented candles in the <b>built-in</b>.' },
+  { tags:['paper towels'], a:'In the <b>laundry room on the top shelf</b>.' },
+  { tags:['hammer','screwdriver','tools','nails','pliers'], a:'Indoor tools in the <b>junk drawer</b>. Pliers in the <b>office craft drawers, 2nd drawer</b>. All other tools in the <b>garage</b>.' },
+  { tags:['flashlight','emergency','lantern'], a:'Lantern is floating around. <b>Red emergency backpack</b> and food supplies are in the <b>laundry room</b>.' },
+  { tags:['documents','passport','marriage license','safe'], a:'Marriage license: <b>built-in plastic file folder</b>. Passports & documents: <b>safe under the bed</b>.' },
+  { tags:['dog','dogs','dog food','data','marshall','leash','collar','poop bags','flea','treats','grooming'], a:'<ul><li>Food: <b>top of dryer, laundry room</b></li><li>Dog kitchen drawer: poop bags, flea meds, treats, lick pads</li><li>Grooming: <b>built-in top-left drawer</b></li><li>Wipes, leashes, collars: <b>shoe rack</b></li><li>Pet docs: <b>Theresa\'s desk</b></li></ul>' },
+  { tags:['detergent','laundry supplies','dryer sheets'], a:'On top of the <b>washing machine</b>.' },
+  { tags:['spare key','spare keys','key tray'], a:'In the <b>key tray</b>.' },
+  { tags:['snack','snacks'], followup:true, type:'snacks', a:null },
+  { tags:['coffee','coffee order','latte'], followup:true, type:'coffee', a:null },
+  { tags:['order','food order','what to order','what to get her','restaurant order'], followup:true, type:'restaurant_type', a:null },
+  { tags:['restaurant','restaurants','where to eat','dinner'], followup:true, type:'restaurant_type', a:null },
+  { tags:['movie','film','watch','put on'], followup:true, type:'movie', a:null },
+  { tags:['date night','date idea','date'], followup:true, type:'date', a:null },
+  { tags:['birthday','birthday gift','present','gift','wish list','budget'], a:'<b>Under $30:</b> Mello hair clip, Paris Cafe candle (Bath & Body Works), butter-themed charm/jewelry, gardening supplies, Blick or Lululemon gift card.<br><br><b>$30-$100:</b> Lego set, silver locket, Folklore cardigan, Korean head spa, Gorjana/Mejuri jewelry, escape room, concert tickets.<br><br><b>$100+:</b> Spa day, Disneyland tickets, Big Bear or Palm Springs weekend, outdoor storage bench, backup camera & dash cam, color analyst appointment, Lightroom classes, new dining table & chairs.<br><br><b>Where to shop:</b> Lego, Ulta, Sephora, Catbird, Gorjana, Mejuri, Lululemon, Blick, Etsy, Nordstrom, Joon Shop, Pigment, Madewell, Anthropologie.<br><b>Never:</b> clothes or shoes.<br><br><b>Birthday combo ideas:</b><ul><li>Dinner at Bosforo + escape room after</li><li>Korean head spa + dinner at Wormwood</li><li>Couples massage + dinner at California English</li><li>Nooze show/concert + dinner beforehand</li></ul><b>Tip:</b> If you need to order something shipped, plan at least 1-2 weeks ahead!' },
+  { tags:['christmas','holiday','xmas'], a:'Same wish list as her birthday. Never clothes or shoes. Tip: order anything shipped at least 2 weeks before!' },
+  { tags:['experience','spa','facial','nails'], a:'Spa days, facials, nails, concerts, stand-up comedy, weekends in Palm Springs, Santa Barbara, Big Bear, or Idyllwild.' },
+  { tags:['weekend','low key','lazy'], a:'Estate sale in the morning, lunch somewhere nearby, walk in the park, movie at home. Or bowling.' },
+  { tags:['bucket list','trip','travel','vacation'], a:'Japan, Italy, Scotland, New Zealand, Montreal. Road trip to Vancouver with the dogs. Also: Chicago, Seattle, D.C., Portland, Monterey.' },
+  { tags:['streaming','hulu','netflix','hbo','prime','amc'], a:'Hulu, Netflix, Prime Video, HBO Max, and AMC+.' },
+  { tags:['book','author','reading'], a:'Loves: Grady Hendrix, Brom, Nat Cassidy, Lisa Jewell, Riley Sager, Paul Tremblay, David Sodergren, older Stephen King. Also reads women\'s rights books and autobiographies.' },
+  { tags:['about','who is theresa','north park'], a:'Product designer in <b>North Park, San Diego</b>. Loves thrifting/estate sales, vintage Pyrex, Lego, embroidery, drawing, gardening (edibles + milkweed for monarchs). Part Filipino. No-buy year. Dog mom to Data and Marshall.' },
+  { tags:['vet','rancho mesa','regular vet'], a:'Regular vet: <b>Rancho Mesa Animal Hospital</b> - <a href="https://www.ranchomesaanimalhospital.com/" target="_blank">ranchomesaanimalhospital.com</a>' },
+  { tags:['urgent vet','tell tail'], a:'Urgent care: <b>Tell Tail Veterinary Urgent Care</b> - <a href="https://telltailvet.com/" target="_blank">telltailvet.com</a>' },
+  { tags:['emergency vet','emergency','sorrento'], a:'<b>Veterinary Specialty Hospital - Sorrento Valley.</b> After-hours or serious emergencies.' },
+  { tags:['poison','aspca','toxic'], a:'<b>ASPCA Poison Control: (888) 426-4435</b> — 24/7.' },
+  { tags:['all vets','vet info','pet emergency'], a:'Regular: Rancho Mesa Animal Hospital<br>Urgent: Tell Tail Vet<br>Emergency: VSH Sorrento Valley<br>Poison 24/7: ASPCA (888) 426-4435' },
+  { tags:['norton family','theresa family','linda','terry'], a:'<b>Norton Family:</b> Mom Linda (Jan 7), Dad Terry (Feb 24), Herman/Kuya Norton (Mar 12, Orange County, wife Malu, kids Genalyn & Gianna), Henry/Bubba Norton (Jul 10, Fort Worth, wife Virginia/Ate V, kids Drew & Nick). Theresa is the youngest (Nov 30).' },
+  { tags:['murray family','jason family','jennifer','karen','alison'], a:'<b>Murray Family:</b> Mom Jennifer (Mar 4), Dad Dave/Chuck (Jan 14), Jason eldest (Sep 23), Karen (Apr 5, husband Carl, daughter Isabella), Alison (Jun 3, husband Diego, stepson Arthur), Andrew/Drewball (Feb 10, girlfriend Robin).' },
+];
+
+// ══════════════════════════════════════
 // CHAT LOGIC
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
+const SNACKS = [
+  'Crackers, salami, and cheese.',
+  'Hummus and carrots.',
+  'Fruit — berries especially.',
+  'A charcuterie-style meat and cheese board.'
+];
+
+const COFFEE_SHOPS = {
+  'little while': { drink:'Iced honey cinnamon latte with oat milk', food:'French onion tart or kaya kouign-amann' },
+  'marta': { drink:'Iced rosemary latte with oat milk', food:'Ham and cheese croissant' },
+  'fuzz': { drink:'Espresso tonic', food:'Spinach danish' },
+  'dia del cafe': { drink:'Iced caramelo latte with oat milk', food:'Pistachio croissant' },
+  'mixed grinds': { drink:'Ca phe muoi (salted coffee)', food:'Chicken empanada' },
+  'starbucks': { drink:'Iced vanilla latte tall', food:'Strawberry matcha loaf or ham and cheese croissant' },
+};
+
+const EASY_DINNER = ['Pho Min', 'Sahara', 'Fat Boy\'s', 'Urban Plates', 'Senor Mango\'s', 'Cantina Mayahuel', 'Sukho Thai', 'Dao Fu', 'The Friendly', 'El Zarape', 'Oscar\'s Mexican Seafood', 'Nood Bar'];
+const SPECIAL_OCCASION = [
+  { name:'Bosforo', cuisine:'Mediterranean/European', price:'$$$', res:'https://www.exploretock.com/bosforo', note:'Cozy and intimate, great for anniversaries' },
+  { name:'Wormwood', cuisine:'Craft cocktails + food', price:'$$$', res:'https://www.wormwoodsd.com', note:'Moody atmosphere, perfect for a special night' },
+  { name:'California English', cuisine:'British-inspired', price:'$$$', res:'https://www.resy.com', note:'Trendy, lively, great for celebrating' },
+  { name:'Et Voila', cuisine:'French Belgian', price:'$$$', res:'https://www.exploretock.com/etvoila', note:'Intimate French bistro feel' },
+  { name:'Haidilao Hot Pot', cuisine:'Hot pot', price:'$$$', res:'https://www.haidilao.com/us/', note:'Fun and interactive, great for groups too' },
+  { name:'Din Tai Fung', cuisine:'Taiwanese/dim sum', price:'$$$', res:'https://www.dintaifungusa.com', note:'Always a treat, known for soup dumplings' },
+  { name:'Bazille at Nordstrom', cuisine:'American', price:'$$$', res:'https://www.nordstrom.com/c/nordstrom-restaurants', note:'Great for a nice lunch or low-key celebration' },
+];
+
+let awaitingFollowup = null;
+
 function findAnswer(input) {
   const q = input.toLowerCase().trim();
+
+  if (awaitingFollowup) {
+    const type = awaitingFollowup;
+    awaitingFollowup = null;
+    return handleFollowup(type, q);
+  }
+
   let best = null, bestScore = 0;
   for (const entry of KB) {
     let score = 0;
     for (const tag of entry.tags) {
       if (q.includes(tag)) score += tag.length * 2;
     }
-    const qWords = q.split(/\s+/);
-    for (const w of qWords) {
+    const words = q.split(/\s+/);
+    for (const w of words) {
       if (w.length > 3 && entry.tags.some(t => t.includes(w) || w.includes(t))) score += 3;
     }
     if (score > bestScore) { bestScore = score; best = entry; }
   }
-  if (bestScore >= 4) return best.a;
-  if (/where|find|located|location/.test(q)) return "Hmm, I don't have that exact location. Try the junk drawer, laundry room, built-in, or under the kitchen sink — those are the most common spots!";
-  if (/gift|present|buy|get her|want/.test(q)) return "Check out her birthday wish list — ask me \"What does Theresa want for her birthday?\" for the full breakdown by budget.";
-  if (/eat|food|restaurant|dinner|lunch/.test(q)) return "Ask me \"What should I order for Theresa?\" or \"What are her favorite restaurants?\"";
-  return "I don't have that one yet! Tap one of the quick chips above for common questions, or ask Theresa directly.";
+
+  if (bestScore >= 4 && best) {
+    if (best.followup) {
+      return triggerFollowup(best.type);
+    }
+    return best.a;
+  }
+
+  if (/where|find|located/.test(q)) return "Hmm, I don't have that one. Try the junk drawer, laundry room, built-in, or under the kitchen sink first!";
+  if (/gift|present|get her/.test(q)) return "Ask me \"what does Theresa want for her birthday?\" for the full tiered gift guide.";
+  return "I don't have that one yet! Try asking about house locations, gifts, food orders, dogs, date nights, or family.";
 }
 
-let chatHistory = [];
-const msgsEl = document.getElementById('messages');
-const inputEl = document.getElementById('inputbox');
+function triggerFollowup(type) {
+  awaitingFollowup = type;
+  const questions = {
+    snacks: 'What kind of snack are you looking for — something salty, something light, or a full spread?',
+    coffee: 'What coffee shop are you at? (Little While, Marta, Fuzz, Dia del Cafe, Mixed Grinds, Starbucks, or somewhere else?)',
+    restaurant_type: 'Is this for an easy weeknight dinner or a special occasion?',
+    movie: 'Are you looking for an old favorite you both love, or something totally new?',
+    date: 'Are you planning a casual evening or something more special like a birthday or anniversary?',
+  };
+  return { followupQ: questions[type] };
+}
 
-function scrollDown() { msgsEl.scrollTop = msgsEl.scrollHeight; }
-function addMsg(role, html) {
-  const row = document.createElement('div');
-  row.className = 'mrow ' + role;
-  const av = document.createElement('div');
-  av.className = 'mav';
-  av.textContent = role === 'bot' ? 'T' : 'J';
-  const bub = document.createElement('div');
-  bub.className = 'bubble';
-  if (role === 'bot') bub.innerHTML = html; else bub.textContent = html;
-  row.appendChild(av); row.appendChild(bub);
-  msgsEl.appendChild(row); scrollDown();
+function handleFollowup(type, q) {
+  if (type === 'snacks') {
+    const pick = SNACKS[Math.floor(Math.random() * SNACKS.length)];
+    return `How about: <b>${pick}</b><br><br>All of these are safe bets and she loves them all equally — pick whatever you can grab easiest.`;
+  }
+
+  if (type === 'coffee') {
+    for (const [shop, info] of Object.entries(COFFEE_SHOPS)) {
+      if (q.includes(shop) || q.includes(shop.replace(' ',''))) {
+        return `At <b>${shop.charAt(0).toUpperCase() + shop.slice(1)}</b>, get her:<br><br><b>Drink:</b> ${info.drink}<br><b>Pastry pairing:</b> ${info.food}`;
+      }
+    }
+    return `I don't have a specific order for that one — when in doubt her default is a <b>small iced vanilla latte with oat milk</b> and whatever pastry looks good.`;
+  }
+
+  if (type === 'restaurant_type') {
+    if (q.includes('easy') || q.includes('weeknight') || q.includes('casual') || q.includes('quick')) {
+      const pick = EASY_DINNER[Math.floor(Math.random() * EASY_DINNER.length)];
+      const others = EASY_DINNER.filter(r => r !== pick).sort(() => 0.5 - Math.random()).slice(0,3).join(', ');
+      return `For an easy dinner, try <b>${pick}</b> tonight.<br><br>Other solid go-tos: ${others}.<br><br>All are local favorites and reliably good.`;
+    } else {
+      const picks = [...SPECIAL_OCCASION].sort(() => 0.5 - Math.random()).slice(0, 3);
+      let html = 'For a special occasion, here are some great options:<br><br>';
+      picks.forEach(r => {
+        html += `<b>${r.name}</b> (${r.cuisine} &middot; ${r.price})<br>${r.note}. <a href="${r.res}" target="_blank">Reserve here</a><br><br>`;
+      });
+      return html.trim();
+    }
+  }
+
+  if (type === 'movie') {
+    const hour = new Date().getHours();
+    if (hour >= 22 || hour < 6) {
+      return `It's getting late — how about a show instead? She loves <b>The Office, Bob's Burgers, Seinfeld, or Simpsons</b> for a cozy end to the night. Easy to stop whenever.`;
+    }
+    if (q.includes('new') || q.includes('something new') || q.includes('fresh')) {
+      return `For something new, try a recent A24 film, or check what's on <b>HBO Max or Hulu</b> — she loves elevated horror and slow-burn thrillers. Ari Aster or Alex Garland films are always a hit.`;
+    }
+    return `Old favorites: <b>Lord of the Rings, The Mummy, Little Miss Sunshine, Amelie, Dumb and Dumber, Tommy Boy, Happy Gilmore, Back to the Future, or Harry Potter.</b><br><br>For a series night: Stranger Things, Sopranos, White Lotus, or Six Feet Under.`;
+  }
+
+  if (type === 'date') {
+    if (q.includes('birthday') || q.includes('anniversary') || q.includes('special')) {
+      return `For something special, some great combos:<br><ul><li>Dinner at <b>Bosforo</b> + <a href="https://www.exploretock.com/bosforo" target="_blank">reserve here</a> + escape room after</li><li>Couples massage + dinner at <b>Wormwood</b></li><li>Dinner at <b>Et Voila</b> + dessert somewhere nearby</li><li>Korean head spa + dinner at <b>California English</b></li></ul><b>Tip:</b> If you need a reservation, book at least a few days ahead — her favorite spots fill up fast on weekends!`;
+    }
+    return `Casual date night ideas she loves:<br><ul><li>Dinner at one of her local spots + movie at home</li><li>Bowling at local lanes</li><li>Walk in Balboa Park + dinner nearby</li><li>Escape room + drinks after</li><li>Check Goldstar or Eventbrite for concerts or comedy shows</li></ul>Keep it low-key and local — she always appreciates that over anything too elaborate.`;
+  }
+
+  return "Not sure I caught that — want to try asking again?";
 }
-function showTyping() {
-  const row = document.createElement('div');
-  row.className = 'mrow bot'; row.id = 'typing';
-  const av = document.createElement('div'); av.className = 'mav'; av.textContent = 'T';
-  const bub = document.createElement('div'); bub.className = 'bubble';
-  bub.innerHTML = '<div class="tdots"><span></span><span></span><span></span></div>';
-  row.appendChild(av); row.appendChild(bub); msgsEl.appendChild(row); scrollDown();
-}
+
 function askChat(text) {
   if (!text.trim()) return;
   addMsg('user', text);
   showTyping();
   setTimeout(() => {
     document.getElementById('typing')?.remove();
-    addMsg('bot', findAnswer(text));
-  }, 500 + Math.random() * 350);
+    const result = findAnswer(text);
+    if (result && result.followupQ) {
+      addFollowupMsg(result.followupQ);
+    } else {
+      addMsg('bot', result);
+    }
+  }, 400 + Math.random() * 300);
+}
+
+const msgsEl = document.getElementById('messages');
+const inputEl = document.getElementById('inputbox');
+function scrollDown() { msgsEl.scrollTop = msgsEl.scrollHeight; }
+function addMsg(role, html) {
+  const row = document.createElement('div');
+  row.className = 'mrow ' + role;
+  const av = document.createElement('div'); av.className = 'mav';
+  av.textContent = role === 'bot' ? 'T' : 'J';
+  const bub = document.createElement('div'); bub.className = 'bubble';
+  if (role === 'bot') bub.innerHTML = html; else bub.textContent = html;
+  row.appendChild(av); row.appendChild(bub);
+  msgsEl.appendChild(row); scrollDown();
+}
+function addFollowupMsg(question) {
+  const row = document.createElement('div');
+  row.className = 'mrow bot';
+  const av = document.createElement('div'); av.className = 'mav'; av.textContent = 'T';
+  const bub = document.createElement('div'); bub.className = 'bubble';
+  bub.textContent = question;
+  row.appendChild(av); row.appendChild(bub);
+  msgsEl.appendChild(row); scrollDown();
+}
+function showTyping() {
+  const row = document.createElement('div'); row.className = 'mrow bot'; row.id = 'typing';
+  const av = document.createElement('div'); av.className = 'mav'; av.textContent = 'T';
+  const bub = document.createElement('div'); bub.className = 'bubble';
+  bub.innerHTML = '<div class="tdots"><span></span><span></span><span></span></div>';
+  row.appendChild(av); row.appendChild(bub); msgsEl.appendChild(row); scrollDown();
 }
 function handleSend() {
   const text = inputEl.value.trim();
@@ -406,237 +523,151 @@ function handleSend() {
 inputEl.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } });
 inputEl.addEventListener('input', () => { inputEl.style.height = 'auto'; inputEl.style.height = Math.min(inputEl.scrollHeight, 100) + 'px'; });
 
-// ══════════════════════════════════════════════
-// BIRTHDAY DATA & LOGIC
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
+// BIRTHDAY DATA
+// ══════════════════════════════════════
 const BDAYS = [
-  { name:'Linda', month:1,  day:7,  group:'norton',  rel:'Theresa\'s mom' },
+  { name:'Linda Norton', month:1, day:7, group:'norton', rel:'Theresa\'s mom' },
   { name:'Dave Murray', month:1, day:14, group:'murray', rel:'Jason\'s dad' },
   { name:'Julian', month:1, day:17, group:'friends', rel:'Kasia\'s son' },
   { name:'Robin', month:1, day:31, group:'murray', rel:'Andrew\'s girlfriend' },
   { name:'Tita Mhey', month:2, day:7, group:'norton', rel:'Theresa\'s aunt' },
-  { name:'Drew Norton', month:12, day:6, group:'norton', rel:'Theresa\'s nephew' },
-  { name:'Terry', month:2, day:24, group:'norton', rel:'Theresa\'s dad' },
-  { name:'Nick', month:2, day:27, group:'norton', rel:'Theresa\'s nephew' },
+  { name:'Andrew Murray', month:2, day:10, group:'murray', rel:'Jason\'s brother' },
+  { name:'Terry Norton', month:2, day:24, group:'norton', rel:'Theresa\'s dad' },
+  { name:'Nick Norton', month:2, day:27, group:'norton', rel:'Theresa\'s nephew' },
   { name:'Jennifer Murray', month:3, day:4, group:'murray', rel:'Jason\'s mom' },
-  { name:'Herman / Kuya', month:3, day:12, group:'norton', rel:'Theresa\'s oldest brother' },
+  { name:'Herman Norton', month:3, day:12, group:'norton', rel:'Theresa\'s oldest brother (Kuya)' },
   { name:'Steven', month:4, day:2, group:'friends', rel:'Friend' },
   { name:'Karen Murray', month:4, day:5, group:'murray', rel:'Jason\'s sister' },
   { name:'Kasia', month:4, day:25, group:'friends', rel:'Friend' },
-  { name:'Genalyn', month:4, day:28, group:'norton', rel:'Theresa\'s niece' },
+  { name:'Genalyn Norton', month:4, day:28, group:'norton', rel:'Theresa\'s niece' },
   { name:'Bianca', month:4, day:29, group:'friends', rel:'Friend' },
   { name:'Vanessa', month:5, day:13, group:'friends', rel:'Friend' },
-  { name:'Virginia / Ate V', month:5, day:19, group:'norton', rel:'Henry\'s wife' },
+  { name:'Virginia Norton', month:5, day:19, group:'norton', rel:'Henry\'s wife (Ate V)' },
   { name:'Alison Murray', month:6, day:3, group:'murray', rel:'Jason\'s sister' },
-  { name:'Henry / Bubba', month:7, day:10, group:'norton', rel:'Theresa\'s brother' },
+  { name:'Henry Norton', month:7, day:10, group:'norton', rel:'Theresa\'s brother (Bubba)' },
   { name:'Jasmine', month:7, day:16, group:'friends', rel:'Friend' },
-  { name:'Isabella', month:7, day:23, group:'murray', rel:'Karen\'s daughter' },
-  { name:'Carl', month:8, day:21, group:'murray', rel:'Karen\'s husband' },
+  { name:'Isabella Murray', month:7, day:23, group:'murray', rel:'Karen\'s daughter' },
+  { name:'Carl Murray', month:8, day:21, group:'murray', rel:'Karen\'s husband' },
   { name:'Leo', month:9, day:17, group:'friends', rel:'Nhu\'s son' },
-  { name:'Jason', month:9, day:23, group:'murray', rel:'Theresa\'s husband' },
+  { name:'Jason Murray', month:9, day:23, group:'murray', rel:'Theresa\'s husband' },
   { name:'Katelin', month:10, day:10, group:'friends', rel:'Friend' },
   { name:'Ava', month:10, day:11, group:'friends', rel:'Nhu\'s daughter' },
   { name:'Nhu', month:10, day:16, group:'friends', rel:'Friend' },
-  { name:'Diego', month:10, day:24, group:'murray', rel:'Alison\'s husband' },
-  { name:'Theresa', month:11, day:30, group:'norton', rel:'It\'s HER!' },
-  { name:'Andrew Murray', month:2, day:10, group:'murray', rel:'Jason\'s brother' },
-  { name:'Malu', month:12, day:12, group:'norton', rel:'Herman\'s wife' },
-  { name:'Gianna / Gigi', month:12, day:26, group:'norton', rel:'Theresa\'s niece' },
+  { name:'Diego Murray', month:10, day:24, group:'murray', rel:'Alison\'s husband' },
+  { name:'Theresa Norton', month:11, day:30, group:'norton', rel:'It\'s her!' },
+  { name:'Drew Norton', month:12, day:6, group:'norton', rel:'Theresa\'s nephew' },
+  { name:'Malu Norton', month:12, day:12, group:'norton', rel:'Herman\'s wife' },
+  { name:'Gianna Norton', month:12, day:26, group:'norton', rel:'Theresa\'s niece (Gigi)' },
 ];
-
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-function getDaysUntil(month, day) {
-  const today = new Date();
-  const thisYear = today.getFullYear();
-  let next = new Date(thisYear, month - 1, day);
-  if (next < today) next = new Date(thisYear + 1, month - 1, day);
-  // same day check
-  if (next.toDateString() === today.toDateString()) return 0;
-  return Math.ceil((next - today) / 86400000);
-}
-
 function getInitials(name) {
-  return name.split(/[\s\/]/)[0][0].toUpperCase() + (name.split(/[\s\/]/)[1] ? name.split(/[\s\/]/)[1][0].toUpperCase() : '');
+  const parts = name.split(' ');
+  return parts.length >= 2 ? parts[0][0] + parts[1][0] : name.substring(0,2).toUpperCase();
 }
-
-function renderBdayAlerts() {
-  const alertsEl = document.getElementById('bday-alerts');
-  alertsEl.innerHTML = '';
-  const alerts = [];
-  BDAYS.forEach(b => {
-    const d = getDaysUntil(b.month, b.day);
-    if (d === 0) alerts.push({ b, d, type:'urgent' });
-    else if (d <= 3) alerts.push({ b, d, type:'urgent' });
-    else if (d <= 7) alerts.push({ b, d, type:'soon' });
-    else if (d <= 14) alerts.push({ b, d, type:'upcoming' });
-  });
-  alerts.sort((a,b) => a.d - b.d).slice(0, 4).forEach(({ b, d, type }) => {
-    const div = document.createElement('div');
-    div.className = 'alert-banner ' + type;
-    const icon = type === 'urgent' ? '&#127880;' : type === 'soon' ? '&#9201;' : '&#128197;';
-    const msg = d === 0 ? `Today is <b>${b.name}'s birthday!</b>` :
-                d === 1 ? `<b>${b.name}'s birthday is tomorrow!</b>` :
-                d <= 7  ? `<b>${b.name}'s birthday is in ${d} days</b> (${MONTHS[b.month-1]} ${b.day})` :
-                          `Coming up: <b>${b.name}</b> on ${MONTHS[b.month-1]} ${b.day} — ${d} days away`;
-    div.innerHTML = `<div class="alert-icon">${icon}</div><div class="alert-text">${msg}</div>`;
-    alertsEl.appendChild(div);
-  });
-  if (alerts.length) alertsEl.style.marginBottom = '14px';
-}
-
 function filterBday(group, el) {
   document.querySelectorAll('.bday-filter').forEach(f => f.classList.remove('active'));
   el.classList.add('active');
-  renderBdayList(group);
+  renderBday(group);
 }
-
-function renderBdayList(group) {
+function renderBday(group) {
   const listEl = document.getElementById('bday-list');
   listEl.innerHTML = '';
-  const filtered = BDAYS.filter(b => group === 'all' || b.group === group);
-  const sorted = [...filtered].map(b => ({ ...b, days: getDaysUntil(b.month, b.day) }))
-    .sort((a, b) => a.days - b.days);
-
-  // group by month
+  const filtered = group === 'all' ? BDAYS : BDAYS.filter(b => b.group === group);
+  const enriched = filtered.map(b => ({ ...b, days: getDaysUntil(b.month, b.day) })).sort((a,b) => a.days - b.days);
   const byMonth = {};
-  sorted.forEach(b => {
-    const key = b.month;
-    if (!byMonth[key]) byMonth[key] = [];
-    byMonth[key].push(b);
-  });
-
-  const monthsSorted = Object.keys(byMonth).map(Number).sort((a,z) => {
-    // sort so current/upcoming months come first
-    const today = new Date();
-    const cm = today.getMonth() + 1;
+  enriched.forEach(b => { if (!byMonth[b.month]) byMonth[b.month] = []; byMonth[b.month].push(b); });
+  const today = new Date();
+  const cm = today.getMonth() + 1;
+  const sortedMonths = Object.keys(byMonth).map(Number).sort((a,z) => {
     const aa = a >= cm ? a : a + 12;
     const zz = z >= cm ? z : z + 12;
     return aa - zz;
   });
-
-  monthsSorted.forEach(m => {
-    const mLabel = document.createElement('div');
-    mLabel.className = 'bday-month';
-    mLabel.textContent = MONTHS[m - 1];
-    listEl.appendChild(mLabel);
+  const TAG_LABELS = { norton:'Norton', murray:'Murray', friends:'Friend' };
+  sortedMonths.forEach(m => {
+    const lbl = document.createElement('div');
+    lbl.className = 'bday-month-label';
+    lbl.textContent = MONTHS[m-1];
+    listEl.appendChild(lbl);
     byMonth[m].forEach(b => {
       const card = document.createElement('div');
-      card.className = 'bday-card' + (b.days === 0 ? ' is-today' : b.days <= 7 ? ' is-soon' : '');
-      const av = document.createElement('div');
-      av.className = 'bday-av';
-      av.textContent = getInitials(b.name);
-      const info = document.createElement('div');
-      info.className = 'bday-info';
-      info.innerHTML = `<div class="bday-name">${b.name}</div><div class="bday-meta">${b.rel} &middot; ${MONTHS[b.month-1]} ${b.day}</div>`;
-      const badge = document.createElement('div');
-      badge.className = 'bday-badge';
-      if (b.days === 0) { badge.classList.add('badge-today'); badge.textContent = 'Today!'; }
-      else if (b.days <= 7) { badge.classList.add('badge-soon'); badge.textContent = `${b.days}d`; }
-      else { badge.classList.add('badge-days'); badge.textContent = `${b.days}d`; }
-      card.appendChild(av); card.appendChild(info); card.appendChild(badge);
+      card.className = `bday-card ${b.group}${b.days === 0 ? ' is-today' : b.days <= 7 ? ' is-soon' : ''}`;
+      const av = document.createElement('div'); av.className = 'bday-av'; av.textContent = getInitials(b.name);
+      const info = document.createElement('div'); info.className = 'bday-info';
+      info.innerHTML = `<div class="bday-name">${b.name}</div><div class="bday-meta">${b.rel} &middot; ${MONTHS[b.month-1]} ${b.day}</div>${b.days <= 7 && b.days > 0 ? `<div class="bday-reminder">Birthday in ${b.days} day${b.days === 1 ? '' : 's'} — don't forget!</div>` : b.days === 0 ? `<div class="bday-reminder">Today!</div>` : ''}`;
+      const right = document.createElement('div'); right.className = 'bday-right';
+      const ftag = document.createElement('div');
+      ftag.className = `bday-family-tag tag-${b.group}`;
+      ftag.textContent = TAG_LABELS[b.group];
+      const daysEl = document.createElement('div');
+      daysEl.className = `bday-days${b.days === 0 ? ' today' : b.days <= 7 ? ' soon' : ''}`;
+      daysEl.textContent = b.days === 0 ? 'Today!' : `${b.days}d`;
+      right.appendChild(ftag); right.appendChild(daysEl);
+      card.appendChild(av); card.appendChild(info); card.appendChild(right);
       listEl.appendChild(card);
     });
   });
 }
 
-function renderBday(group) {
-  renderBdayAlerts();
-  renderBdayList(group);
-}
-
-// ══════════════════════════════════════════════
-// CHORES DATA & LOGIC
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
+// CHORES
+// ══════════════════════════════════════
 const CHORES = [
-  // WEEKLY
-  { id:'dishes',    name:'Dishes',                   freq:'weekly',    tag:'Weekly',    note:'Daily ideally, but at minimum weekly' },
-  { id:'vacuum',    name:'Vacuum floors',             freq:'weekly',    tag:'Weekly',    note:'All rooms' },
-  { id:'dogpoop',   name:'Clean up dog poop',         freq:'weekly',    tag:'Weekly',    note:'Check yard and any indoor accidents' },
-  { id:'laundry',   name:'Do laundry',                freq:'weekly',    tag:'Weekly',    note:'Wash, dry, fold, and put away' },
-  { id:'trash',     name:'Take out trash & recycling',freq:'weekly',    tag:'Weekly',    note:'Check all bins' },
-  { id:'wiping',    name:'Wipe down counters & stovetop', freq:'weekly', tag:'Weekly',   note:'Kitchen and bathroom counters' },
-  { id:'sweep',     name:'Sweep/mop floors',          freq:'weekly',    tag:'Weekly',    note:'Kitchen and bathroom especially' },
-  // BIWEEKLY
-  { id:'bathclean', name:'Clean bathroom',            freq:'biweekly',  tag:'Every 2 wks', note:'Toilet, sink, shower, mirrors' },
-  { id:'fridge',    name:'Clean out the fridge',      freq:'biweekly',  tag:'Every 2 wks', note:'Toss old food, wipe shelves' },
-  { id:'dogsupply', name:'Restock dog supplies',      freq:'biweekly',  tag:'Every 2 wks', note:'Check poop bags, treats, flea meds' },
-  // MONTHLY
-  { id:'bedding',   name:'Wash bedding',              freq:'monthly',   tag:'Monthly',   note:'Sheets, pillowcases — every 3-4 weeks is totally fine' },
-  { id:'windows',   name:'Wipe down windows & mirrors',freq:'monthly',  tag:'Monthly',   note:'Inside windows and bathroom mirrors' },
-  { id:'dust',      name:'Dust surfaces',             freq:'monthly',   tag:'Monthly',   note:'Shelves, TV stand, baseboards' },
-  { id:'microwave', name:'Clean microwave & oven',    freq:'monthly',   tag:'Monthly',   note:'Inside and out' },
-  { id:'donations', name:'Go through donations/clutter', freq:'monthly', tag:'Monthly',  note:'No-buy year — keep surfaces clear' },
-  { id:'garden',    name:'Tend the garden',           freq:'monthly',   tag:'Monthly',   note:'Water pumpkins & cucumbers, check milkweed for caterpillars' },
-  // AS NEEDED
-  { id:'grocery',   name:'Grocery run',               freq:'asneeded',  tag:'As needed', note:'Sprouts or Trader Joe\'s mainly' },
-  { id:'clothes',   name:'Fold & put away clothes',   freq:'asneeded',  tag:'As needed', note:'Don\'t let the pile grow on the chair' },
-  { id:'carwash',   name:'Car wash',                  freq:'asneeded',  tag:'As needed', note:'When visibly dirty' },
+  { id:'dishes', name:'Dishes', steps:'Wash, dry, and put away. Don\'t let them pile up in the sink.', freq:'weekly', tag:'Weekly' },
+  { id:'vacuum', name:'Vacuum all floors', steps:'All rooms including under furniture if possible.', freq:'weekly', tag:'Weekly' },
+  { id:'dogpoop', name:'Clean up dog poop', steps:'Check the yard and all indoor areas. Dispose of waste bags properly.', freq:'weekly', tag:'Weekly' },
+  { id:'laundry', name:'Do laundry', steps:'Wash, dry, fold, and put away — don\'t leave folded piles on the chair.', freq:'weekly', tag:'Weekly' },
+  { id:'trash', name:'Take out trash & recycling', steps:'Check all bins: kitchen, bathroom, office. Replace bags.', freq:'weekly', tag:'Weekly' },
+  { id:'counters', name:'Wipe down counters & stovetop', steps:'Kitchen counters, stovetop, and bathroom counters. Use appropriate cleaner.', freq:'weekly', tag:'Weekly' },
+  { id:'sweep', name:'Sweep & mop floors', steps:'Kitchen and bathroom especially. Use steam cleaner for deep clean.', freq:'weekly', tag:'Weekly' },
+  { id:'bathroom', name:'Clean bathroom', steps:'Scrub toilet (inside and out), clean tiles, wipe down sink and mirrors, scrub bathtub, empty trash, replace towels if needed.', freq:'biweekly', tag:'Every 2 wks' },
+  { id:'fridge', name:'Clean out the fridge', steps:'Toss expired food, wipe down shelves and drawers, check condiments. Do a quick smell test.', freq:'biweekly', tag:'Every 2 wks' },
+  { id:'dogsupply', name:'Restock dog supplies', steps:'Check poop bags, treats, flea meds, lick pads. Refill anything running low.', freq:'biweekly', tag:'Every 2 wks' },
+  { id:'bedding', name:'Wash bedding', steps:'Sheets, pillowcases, and duvet cover. Every 3-4 weeks is totally fine.', freq:'monthly', tag:'Monthly' },
+  { id:'windows', name:'Wipe windows & mirrors', steps:'Inside windows, bathroom mirrors, any glass surfaces. Use glass cleaner.', freq:'monthly', tag:'Monthly' },
+  { id:'dust', name:'Dust all surfaces', steps:'Shelves, TV stand, baseboards, fan blades, picture frames. Don\'t skip the baseboards.', freq:'monthly', tag:'Monthly' },
+  { id:'microwave', name:'Clean microwave & oven', steps:'Wipe inside microwave (use a bowl of water + lemon to loosen grime). Wipe oven interior and burner grates.', freq:'monthly', tag:'Monthly' },
+  { id:'donations', name:'Go through clutter & donations', steps:'No-buy year in effect — keep surfaces clear. Bag anything unused for donation.', freq:'monthly', tag:'Monthly' },
+  { id:'garden', name:'Tend the garden', steps:'Water pumpkins & cucumbers, check milkweed for monarch caterpillars, remove weeds, check for wilting or pests.', freq:'monthly', tag:'Monthly' },
+  { id:'grocery', name:'Grocery run', steps:'Sprouts or Trader Joe\'s mainly. Staples: bread, sandwich meat, cheese, fruit, carrots, hummus, eggs, butter, berries, yogurt.', freq:'asneeded', tag:'As needed' },
+  { id:'clothes', name:'Fold & put away clothes', steps:'Don\'t let the pile grow on the chair. Fold everything and put away promptly.', freq:'asneeded', tag:'As needed' },
+  { id:'carwash', name:'Car wash', steps:'When visibly dirty. Check inside too — vacuum floor mats.', freq:'asneeded', tag:'As needed' },
 ];
-
-const FREQ_ORDER = { weekly:0, biweekly:1, monthly:2, asneeded:3 };
-const FREQ_LABELS = { weekly:'Weekly', biweekly:'Every 2 weeks', monthly:'Monthly', asneeded:'As needed' };
 const TAG_CLASS = { weekly:'tag-weekly', biweekly:'tag-biweekly', monthly:'tag-monthly', asneeded:'tag-asneeded' };
-
-function loadDoneChores() {
-  try { return JSON.parse(localStorage.getItem('choresDone') || '{}'); } catch { return {}; }
-}
-function saveDoneChores(done) {
-  try { localStorage.setItem('choresDone', JSON.stringify(done)); } catch {}
-}
-
-function toggleChore(id) {
-  const done = loadDoneChores();
-  done[id] = !done[id];
-  saveDoneChores(done);
-  renderChores();
-}
-
-function resetChores() {
-  saveDoneChores({});
-  renderChores();
-}
-
+const SECTION_NAMES = { weekly:'Weekly chores', biweekly:'Every two weeks', monthly:'Monthly chores', asneeded:'As needed' };
+function loadDone() { try { return JSON.parse(localStorage.getItem('choresDone2') || '{}'); } catch { return {}; } }
+function saveDone(d) { try { localStorage.setItem('choresDone2', JSON.stringify(d)); } catch {} }
+function toggleChore(id) { const d = loadDone(); d[id] = !d[id]; saveDone(d); renderChores(); }
+function resetChores() { saveDone({}); renderChores(); }
 function renderChores() {
-  const done = loadDoneChores();
+  const done = loadDone();
   const listEl = document.getElementById('chore-list');
   listEl.innerHTML = '';
-
-  const sections = ['weekly','biweekly','monthly','asneeded'];
-  const sectionNames = { weekly:'Weekly chores', biweekly:'Every two weeks', monthly:'Monthly chores', asneeded:'As needed' };
-
-  sections.forEach(freq => {
+  ['weekly','biweekly','monthly','asneeded'].forEach(freq => {
     const items = CHORES.filter(c => c.freq === freq);
-    const section = document.createElement('div');
-    section.className = 'chores-section';
-    const heading = document.createElement('div');
-    heading.className = 'chores-heading';
-    heading.textContent = sectionNames[freq];
-    section.appendChild(heading);
+    const sec = document.createElement('div'); sec.className = 'chores-section';
+    const hd = document.createElement('div'); hd.className = 'chores-heading'; hd.textContent = SECTION_NAMES[freq];
+    sec.appendChild(hd);
     items.forEach(c => {
       const card = document.createElement('div');
       card.className = 'chore-card' + (done[c.id] ? ' done' : '');
       card.onclick = () => toggleChore(c.id);
-      const check = document.createElement('div');
-      check.className = 'chore-check';
-      check.innerHTML = '<svg viewBox="0 0 12 10"><polyline points="1,5 4,8 11,1"/></svg>';
-      const info = document.createElement('div');
-      info.className = 'chore-info';
-      info.innerHTML = `<div class="chore-name">${c.name}</div><div class="chore-freq">${c.note}</div>`;
+      const chk = document.createElement('div'); chk.className = 'chore-check';
+      chk.innerHTML = '<svg viewBox="0 0 12 10"><polyline points="1,5 4,8 11,1"/></svg>';
+      const info = document.createElement('div'); info.className = 'chore-info';
+      info.innerHTML = `<div class="chore-name">${c.name}</div><div class="chore-steps">${c.steps}</div>`;
       const tag = document.createElement('div');
       tag.className = `chore-tag ${TAG_CLASS[c.freq]}`;
       tag.textContent = c.tag;
-      card.appendChild(check); card.appendChild(info); card.appendChild(tag);
-      section.appendChild(card);
+      card.appendChild(chk); card.appendChild(info); card.appendChild(tag);
+      sec.appendChild(card);
     });
-    listEl.appendChild(section);
+    listEl.appendChild(sec);
   });
-
-  // progress
   const total = CHORES.length;
   const doneCount = CHORES.filter(c => done[c.id]).length;
-  const pct = Math.round((doneCount / total) * 100);
-  document.getElementById('chore-progress').style.width = pct + '%';
+  document.getElementById('chore-progress').style.width = Math.round(doneCount/total*100) + '%';
   document.getElementById('chore-label').textContent = `${doneCount} / ${total} done`;
 }
 </script>
