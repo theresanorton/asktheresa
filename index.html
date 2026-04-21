@@ -238,6 +238,9 @@ const SPECIAL_EVENTS = [
   { name:"Theresa's Birthday", month:11, day:30, type:'urgent' },
   { name:"Christmas", month:12, day:25, type:'info' },
   { name:"New Year's Eve", month:12, day:31, type:'info' },
+  { name:"Flea meds due (Data & Marshall)", month:5, day:1, type:'info' },
+  { name:"Flea meds due (Data & Marshall)", month:7, day:30, type:'info' },
+  { name:"Flea meds due (Data & Marshall)", month:10, day:28, type:'info' },
 ];
 const FAMILY_BDAYS_FOR_ALERT = [
   { name:'Linda (Theresa\'s mom)', month:1, day:7 },
@@ -315,7 +318,16 @@ const KB = [
   { tags:['hammer','screwdriver','tools','nails','pliers'], a:'Indoor tools in the <b>junk drawer</b>. Pliers in the <b>office craft drawers, 2nd drawer</b>. All other tools in the <b>garage</b>.' },
   { tags:['flashlight','emergency','lantern'], a:'Lantern is floating around. <b>Red emergency backpack</b> and food supplies are in the <b>laundry room</b>.' },
   { tags:['documents','passport','marriage license','safe'], a:'Marriage license: <b>built-in plastic file folder</b>. Passports & documents: <b>safe under the bed</b>.' },
-  { tags:['dog','dogs','dog food','data','marshall','leash','collar','poop bags','flea','treats','grooming'], a:'<ul><li>Food: <b>top of dryer, laundry room</b></li><li>Dog kitchen drawer: poop bags, flea meds, treats, lick pads</li><li>Grooming: <b>built-in top-left drawer</b></li><li>Wipes, leashes, collars: <b>shoe rack</b></li><li>Pet docs: <b>Theresa\'s desk</b></li></ul>' },
+  { tags:['where are dog supplies','dog supplies location','where leash','where collar','where poop bags','where grooming','where dog stuff'], a:'<ul><li>Food: <b>top of dryer, laundry room</b></li><li>Treat jar (Greenies): <b>on top of dryer</b></li><li>Dog kitchen drawer: poop bags, flea meds, regular treats, lick pads</li><li>Grooming supplies: <b>built-in top-left drawer</b></li><li>Wipes, leashes, collars: <b>shoe rack</b></li><li>Pet documents: <b>Theresa\'s desk</b></li></ul>' },
+  { tags:['what food brand','what brand','what do dogs eat','food brand','orijen','ollie','weruva','what kibble','what wet food'], a:'The dogs eat <b>Orijen Small Breed</b> for kibble and either <b>Ollie</b> or <b>Weruva Chicken Soup</b> for the wet food. Food is stored on top of the dryer in the laundry room.' },
+  { tags:['feeding time','what time feed','when feed','feed time','when do dogs eat','breakfast time dogs','dinner time dogs','what time dogs eat'], a:'<b>Breakfast: 8–9 AM</b><br><b>Dinner: 5–6 PM</b><br><br>Try to keep it consistent — they know the routine.' },
+  { tags:['how much food','dog portions','data portions','marshall portions','how much to feed','portion size'], a:'<b>Data</b> (24 lbs, active): 2.5 tbsp Orijen + ~2 oz Ollie or Weruva, twice daily.<br><b>Marshall</b> (20 lbs, senior): 2 tbsp Orijen + ~1.5 oz Ollie or Weruva, twice daily.<br><br>Keep Marshall\'s portions lean to protect his joints.' },
+  { tags:['how to make dog food','recipe','how to prepare','dog food recipe','data recipe','marshall recipe','how to feed','preparation','prepare dog food','make food dogs'], a:'<b>For both dogs — follow this order:</b><ol><li>Add kibble to bowl (Data: 2.5 tbsp / Marshall: 2 tbsp)</li><li>Marshall morning only: add <b>1 Just For Dogs joint supplement tablet</b></li><li>Add a splash of <b>hot water</b> to soften the kibble — stir and let sit briefly</li><li>Add wet food on top (Ollie or Weruva)</li><li>Mix together and serve</li></ol>' },
+  { tags:['marshall supplement','joint supplement','just for dogs','supplement','marshall morning'], a:'Marshall gets <b>1 Just For Dogs joint supplement tablet</b> in his <b>morning meal only</b> — not evening. Add it before the hot water step so it gets mixed in with the kibble.' },
+  { tags:['data recipe','how to feed data','data food','data meal'], a:'<b>Data\'s meal (twice daily — 8–9 AM and 5–6 PM):</b><ol><li>2.5 tbsp Orijen Small Breed kibble into bowl</li><li>Add splash of hot water, stir, let sit briefly</li><li>Add ~2 oz Ollie (about 1/6 pack) or ~2 oz Weruva (about 1/4 cup)</li><li>Mix and serve</li></ol>' },
+  { tags:['marshall recipe','how to feed marshall','marshall food','marshall meal'], a:'<b>Marshall\'s morning meal (8–9 AM):</b><ol><li>2 tbsp Orijen Small Breed kibble into bowl</li><li>Add <b>1 Just For Dogs joint supplement tablet</b></li><li>Add splash of hot water, stir, let sit briefly</li><li>Add ~1.5 oz Ollie (1/8 pack) or ~1.5 oz Weruva (3 tbsp)</li><li>Mix and serve</li></ol><b>Evening meal (5–6 PM):</b> same steps but <b>skip the supplement</b>.' },
+  { tags:['treats','greenies','dog treats','greenie','dental treats','treat jar','how many treats'], a:'Greenie dental treats are in the <b>dog treat jar on top of the dryer</b>. Limit <b>1–2 big Greenies per day</b>. Regular treats and lick pads are in the dog kitchen drawer.' },
+  { tags:['flea meds','flea medication','flea treatment','when flea meds'], a:'Flea meds every <b>90 days</b> starting May 1. Schedule: May 1, July 30, October 28. Check the calendar tab for alerts.' },
   { tags:['detergent','laundry supplies','dryer sheets'], a:'On top of the <b>washing machine</b>.' },
   { tags:['spare key','spare keys','key tray'], a:'In the <b>key tray</b>.' },
   { tags:['snack','snacks'], followup:true, type:'snacks', a:null },
@@ -339,6 +351,14 @@ const KB = [
   { tags:['all vets','vet info','pet emergency'], a:'Regular: Rancho Mesa Animal Hospital<br>Urgent: Tell Tail Vet<br>Emergency: VSH Sorrento Valley<br>Poison 24/7: ASPCA (888) 426-4435' },
   { tags:['norton family','theresa family','linda','terry'], a:'<b>Norton Family:</b> Mom Linda (Jan 7), Dad Terry (Feb 24), Herman/Kuya Norton (Mar 12, Orange County, wife Malu, kids Genalyn & Gianna), Henry/Bubba Norton (Jul 10, Fort Worth, wife Virginia/Ate V, kids Drew & Nick). Theresa is the youngest (Nov 30).' },
   { tags:['murray family','jason family','jennifer','karen','alison'], a:'<b>Murray Family:</b> Mom Jennifer (Mar 4), Dad Dave/Chuck (Jan 14), Jason eldest (Sep 23), Karen (Apr 5, husband Carl, daughter Isabella), Alison (Jun 3, husband Diego, stepson Arthur), Andrew/Drewball (Feb 10, girlfriend Robin).' },
+  { tags:['favorite color','color','colour'], a:'Theresa\'s favorite colors are <b>yellow and dark green</b>.' },
+  { tags:['jewelry','metal','gold','silver','rosegold'], a:'She prefers <b>gold or rose gold</b> for jewelry. Silver sometimes too. Shops at Catbird, Gorjana, Mejuri, Catbird on Etsy.' },
+
+  { tags:['feeding schedule','feed dogs','dog meal','how much food','morning feed','evening feed','how often feed','how to feed marshall','how to feed data','dog schedule','dog portions','dog recipe','when to feed','what time feed','feeding time'], a:'<b>Feeding times:</b> Breakfast 8-9 AM, Dinner 5-6 PM.<br><br><b>Data:</b> 2.5 tbsp Orijen + ~2 oz Ollie or Weruva, twice daily.<br><b>Marshall:</b> 2 tbsp Orijen + ~1.5 oz Ollie or Weruva, twice daily. Add <b>1 Just For Dogs joint supplement tablet to morning meal only</b>.<br><br>Method: dry kibble first, add hot water to soften, then add wet food and mix. Dog food is on top of the dryer in the laundry room.' },
+
+  { tags:['in n out','in-n-out','innout','burger'], a:'At In-N-Out: <b>Cheeseburger with onions, Animal Style fries, and a root beer.</b>' },
+  { tags:['boots','steel toe','shoes jason','jason boots','motorcycle boots'], a:'Jason does NOT have steel-toed boots. He has <b>motorcycle boots with some kind of metal on the toe</b>.' },
+  { tags:['funeral','death','end of life','what theresa wants'], a:'Theresa\'s wishes: <b>Nothing too sad.</b> No religious speaker. No generic eulogy — she wants people who actually knew her to speak. Guests should wear <b>yellow or floral</b> (not black). For her body: either an <b>eco/green burial or cremation</b>.' },
 ];
 
 // ══════════════════════════════════════
@@ -386,11 +406,12 @@ function findAnswer(input) {
   for (const entry of KB) {
     let score = 0;
     for (const tag of entry.tags) {
-      if (q.includes(tag)) score += tag.length * 2;
+      if (q.includes(tag)) score += tag.length * 3;
+      else if (tag.split(' ').every(w => q.includes(w))) score += tag.length;
     }
-    const words = q.split(/\s+/);
+    const words = q.split(/\s+/).filter(w => w.length > 3);
     for (const w of words) {
-      if (w.length > 3 && entry.tags.some(t => t.includes(w) || w.includes(t))) score += 3;
+      if (entry.tags.some(t => t.includes(w) || w.includes(t))) score += 2;
     }
     if (score > bestScore) { bestScore = score; best = entry; }
   }
@@ -559,6 +580,9 @@ const BDAYS = [
   { name:'Drew Norton', month:12, day:6, group:'norton', rel:'Theresa\'s nephew' },
   { name:'Malu Norton', month:12, day:12, group:'norton', rel:'Herman\'s wife' },
   { name:'Gianna Norton', month:12, day:26, group:'norton', rel:'Theresa\'s niece (Gigi)' },
+  { name:'Ivy', month:3, day:19, group:'friends', rel:"Vanessa's daughter" },
+  { name:'Maxi', month:3, day:17, group:'friends', rel:"Vanessa's daughter" },
+  { name:'Chloe', month:7, day:11, group:'friends', rel:"Kasia's daughter" },
 ];
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 function getInitials(name) {
