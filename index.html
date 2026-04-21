@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Ask Theresa</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
@@ -27,8 +27,8 @@
     --blue: #4A9EE8; --blue-light: #0A1A30;
   }
 }
-html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); }
-#app { display: flex; flex-direction: column; height: 100vh; max-width: 760px; margin: 0 auto; }
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overscroll-behavior: none; }
+#app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; max-width: 760px; margin: 0 auto; }
 
 /* HEADER */
 #header { padding: 14px 20px 0; background: var(--warm-white); flex-shrink: 0; border-bottom: 1px solid var(--border); }
@@ -44,7 +44,7 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
 .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
 
 /* PANELS */
-#panels { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+#panels { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
 .panel { display: none; flex: 1; flex-direction: column; overflow: hidden; }
 .panel.active { display: flex; }
 
@@ -58,7 +58,9 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
 .alert-item b { font-weight: 500; }
 
 /* ══ CHAT ══ */
-#messages { flex: 1; overflow-y: auto; padding: 14px 14px 6px; display: flex; flex-direction: column; gap: 11px; scroll-behavior: smooth; }
+#panel-chat { display: none; flex-direction: column; overflow: hidden; }
+#panel-chat.active { display: flex; }
+#messages { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 14px 14px 6px; display: flex; flex-direction: column; gap: 11px; scroll-behavior: smooth; }
 #messages::-webkit-scrollbar { width: 3px; }
 #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 .mrow { display: flex; gap: 8px; align-items: flex-end; }
@@ -81,11 +83,11 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
 .tdots span:nth-child(2) { animation-delay: .2s; }
 .tdots span:nth-child(3) { animation-delay: .4s; }
 @keyframes td { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-4px);opacity:1} }
-#inputarea { padding: 10px 12px 14px; border-top: 1px solid var(--border); background: var(--warm-white); flex-shrink: 0; display: flex; gap: 8px; align-items: flex-end; }
-#inputbox { flex: 1; padding: 8px 13px; font-size: 13px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border); border-radius: 18px; background: var(--cream); color: var(--ink); resize: none; outline: none; line-height: 1.5; max-height: 100px; transition: border-color .15s; }
+#inputarea { padding: 10px 12px max(14px, env(safe-area-inset-bottom)); border-top: 1px solid var(--border); background: var(--warm-white); flex-shrink: 0; display: flex; gap: 8px; align-items: flex-end; position: sticky; bottom: 0; z-index: 10; }
+#inputbox { flex: 1; min-width: 0; padding: 8px 13px; font-size: 16px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border); border-radius: 18px; background: var(--cream); color: var(--ink); resize: none; outline: none; line-height: 1.5; max-height: 100px; transition: border-color .15s; -webkit-text-size-adjust: 100%; }
 #inputbox:focus { border-color: var(--accent); }
 #inputbox::placeholder { color: var(--muted); }
-#sendbtn { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); border: none; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+#sendbtn { width: 34px; height: 34px; min-width: 34px; border-radius: 50%; background: var(--accent); border: none; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background .15s; -webkit-tap-highlight-color: transparent; }
 #sendbtn:hover { background: var(--accent-dark); }
 #sendbtn svg { width: 14px; height: 14px; fill: white; margin-left: 1px; }
 
