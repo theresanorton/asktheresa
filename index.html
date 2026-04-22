@@ -336,7 +336,7 @@ const KB = [
   { tags:['snack','snacks'], followup:true, type:'snacks', a:null },
   { tags:['coffee','coffee order','latte'], followup:true, type:'coffee', a:null },
   { tags:['order','food order','what to order','what to get her','restaurant order'], followup:true, type:'restaurant_type', a:null },
-  { tags:['restaurant','restaurants','where to eat','dinner'], followup:true, type:'restaurant_type', a:null },
+  { tags:['restaurant','restaurants','where to eat','where should we eat','where should we go','where do you want to eat'], followup:true, type:'restaurant_type', a:null },
   { tags:['movie','film','watch','put on'], followup:true, type:'movie', a:null },
   { tags:['date night','date idea','date'], followup:true, type:'date', a:null },
   { tags:['birthday','birthday gift','present','gift','wish list','budget'], a:'<b>Under $30:</b> Mello hair clip, Paris Cafe candle (Bath & Body Works), butter-themed charm/jewelry, gardening supplies, Blick or Lululemon gift card.<br><br><b>$30-$100:</b> Lego set, silver locket, Folklore cardigan, Korean head spa, Gorjana/Mejuri jewelry, escape room, concert tickets.<br><br><b>$100+:</b> Spa day, Disneyland tickets, Big Bear or Palm Springs weekend, outdoor storage bench, backup camera & dash cam, color analyst appointment, Lightroom classes, new dining table & chairs.<br><br><b>Where to shop:</b> Lego, Ulta, Sephora, Catbird, Gorjana, Mejuri, Lululemon, Blick, Etsy, Nordstrom, Joon Shop, Pigment, Madewell, Anthropologie.<br><b>Never:</b> clothes or shoes.<br><br><b>Birthday combo ideas:</b><ul><li>Dinner at Bosforo + escape room after</li><li>Korean head spa + dinner at Wormwood</li><li>Couples massage + dinner at California English</li><li>Nooze show/concert + dinner beforehand</li></ul><b>Tip:</b> If you need to order something shipped, plan at least 1-2 weeks ahead!' },
@@ -361,7 +361,34 @@ const KB = [
 
   { tags:['in n out','in-n-out','innout','burger'], a:'At In-N-Out: <b>Cheeseburger with onions, Animal Style fries, and a root beer.</b>' },
   { tags:['boots','steel toe','shoes jason','jason boots','motorcycle boots'], a:'Jason does NOT have steel-toed boots. He has <b>motorcycle boots with some kind of metal on the toe</b>.' },
-  { tags:['funeral','death','end of life','what theresa wants'], a:'Theresa\'s wishes: <b>Nothing too sad.</b> No religious speaker. No generic eulogy — she wants people who actually knew her to speak. Guests should wear <b>yellow or floral</b> (not black). For her body: either an <b>eco/green burial or cremation</b>.' },
+  { tags:['funeral','death','end of life','cremation','burial','funeral wishes','after i die'], a:'Theresa\'s wishes: <b>Nothing too sad.</b> No religious speaker. No generic eulogy — she wants people who actually knew her to speak. Guests should wear <b>yellow or floral</b> (not black). For her body: either an <b>eco/green burial or cremation</b>.' },
+  { tags:['drink','drinks','what does theresa drink','what to drink','beverage','what theresa like to drink','what does theresa like'], a:'Theresa drinks <b>still water</b> and <b>coffee</b> only. She does not drink alcohol or tea.<br><br>Coffee order: <b>small iced vanilla latte with oat milk</b>. Also loves iced Vietnamese coffee.<br><br><i>Theresa does not tea. Earl Grey. Hot. \u{1F596}</i>' },
+
+  // LIGHTBULBS
+  { tags:['lightbulb','light bulb','bulb','under counter','cabinet light','kitchen light','halogen','G4'], a:'Under-counter lightbulbs are <b>halogen, 20 watt, 12V, G4 plug, 250 lumens</b>. When replacing, make sure you get the G4 bi-pin base.' },
+
+  // LUNCH / DINNER SUGGESTIONS
+  { tags:['lunch','what for lunch','lunch idea','where lunch'], followup:true, type:'meal_lunch', a:null },
+  { tags:['what for dinner','dinner idea','what should we have for dinner','what to have for dinner','dinner suggestion'], followup:true, type:'meal_dinner', a:null },
+
+  // GROCERY
+  { tags:['grocery','groceries','grocery list','what to buy','shopping list','what do we need','what do we need from store'], followup:true, type:'grocery', a:null },
+  { tags:['grocery sprouts','sprouts list','what from sprouts'], a:'At Sprouts, grab: nectarines, raspberries, strawberries, and pears. Also good for general produce and fruit — better quality than a regular grocery store.' },
+
+  // CANADIAN PUNS (easter egg)
+  { tags:['canada','canadian','toronto','maple','hockey','toque','eh','poutine'], a:'Aboot time you asked! As a household that has adopted one Canadian, a few house rules: say "sorry" like you mean it, keep the back bacon in the fridge, and the thermostat stays at a reasonable temperature, eh. Also Jason probably knows where the duct tape is. 🍁' },
+
+  // MOTORCYCLE PUNS (easter egg)
+  { tags:['motorcycle','bike','harley','chopper','riding'], a:"Jason's motorcycle boots are somewhere near the door — the ones with metal on the toe, not steel-toed, just vibes. Helmet hair is a valid hairstyle in this household. 🏍️" },
+
+  // STAR TREK TNG TRIVIA (easter egg)
+  { tags:['star trek','picard','data star trek','tng','next generation','worf','riker','holodeck','starfleet','enterprise'], a:"Theresa named her dog Data after the android from Star Trek: The Next Generation — Jason's pick, naturally. Fun fact: Data was the first android to serve as a Starfleet officer. He could process 60 trillion operations per second but still couldn't understand why humans need sleep. Much like our Data, who also runs at full speed at 3am." },
+
+  // SOPRANOS TRIVIA (easter egg)
+  { tags:['sopranos','tony soprano','bada bing','jersey','mob','gabagool','carmela','paulie'], a:"One of Theresa's favorite shows. Fun fact: Tony Soprano's panic attacks were inspired by a real psychological phenomenon — he was literally having a breakdown while feeding ducks. The show ran for 6 seasons and ended with one of TV's most debated finales. You either know, or you don't." },
+
+  // COFFEE EASTER EGG (replace the existing coffee followup trigger to add the TNG pun)
+
 ];
 
 // ══════════════════════════════════════
@@ -437,10 +464,15 @@ function triggerFollowup(type) {
     snacks: 'What kind of snack are you looking for — something salty, something light, or a full spread?',
     coffee: 'What coffee shop are you at? (Little While, Marta, Fuzz, Dia del Cafe, Mixed Grinds, Starbucks, or somewhere else?)',
     restaurant_type: 'Is this for an easy weeknight dinner or a special occasion?',
+    meal_lunch: 'Any cuisine in mind, or should I just pick something?',
+    meal_dinner: 'Quick and easy tonight, or something a bit more special?',
+    grocery: "Which store are you heading to? (Sprouts, Trader Joe's, Vons/Ralphs, Whole Foods, or Costco?)",
     movie: 'Are you looking for an old favorite you both love, or something totally new?',
     date: 'Are you planning a casual evening or something more special like a birthday or anniversary?',
   };
-  return { followupQ: questions[type] };
+  const fq = questions[type];
+  if (!fq) return 'Hmm, try rephrasing that!';
+  return { followupQ: fq };
 }
 
 function handleFollowup(type, q) {
@@ -450,12 +482,16 @@ function handleFollowup(type, q) {
   }
 
   if (type === 'coffee') {
+    // Easter egg: Theresa does not tea. Earl Grey. Hot.
+    if (q.includes('tea') || q.includes('earl grey') || q.includes('earl gray')) {
+      return `Theresa does not tea. Earl Grey. Hot. ☕ She is a coffee person — ask again with a coffee shop name.`;
+    }
     for (const [shop, info] of Object.entries(COFFEE_SHOPS)) {
       if (q.includes(shop) || q.includes(shop.replace(' ',''))) {
         return `At <b>${shop.charAt(0).toUpperCase() + shop.slice(1)}</b>, get her:<br><br><b>Drink:</b> ${info.drink}<br><b>Pastry pairing:</b> ${info.food}`;
       }
     }
-    return `I don't have a specific order for that one — when in doubt her default is a <b>small iced vanilla latte with oat milk</b> and whatever pastry looks good.`;
+    return `I don't have a specific order for that one — when in doubt her default is a <b>small iced vanilla latte with oat milk</b> and whatever pastry looks good. Theresa does not tea. Earl Grey. Hot. 🖖`;
   }
 
   if (type === 'restaurant_type') {
@@ -484,6 +520,46 @@ function handleFollowup(type, q) {
     return `Old favorites: <b>Lord of the Rings, The Mummy, Little Miss Sunshine, Amelie, Dumb and Dumber, Tommy Boy, Happy Gilmore, Back to the Future, or Harry Potter.</b><br><br>For a series night: Stranger Things, Sopranos, White Lotus, or Six Feet Under.`;
   }
 
+  if (type === 'meal_lunch') {
+    if (/thai|curry/.test(q)) return 'For Thai, <b>Sukho Thai</b> on 30th Street is the move for lunch.';
+    if (/mediterranean|gyro|middle east|sahara/.test(q)) return 'Head to <b>Sahara</b> on El Cajon — great gyros and mezze for lunch.';
+    if (/mexican|taco|burrito/.test(q)) return '<b>Senor Mango\'s</b> is a solid lunch pick — casual Mexican, local favorite.';
+    if (/pho|vietnamese|noodle/.test(q)) return '<b>Pho Min</b> on University is great for a quick Vietnamese lunch.';
+    if (/burger|american/.test(q)) return '<b>Fat Boy\'s</b> or <b>Urban Plates</b> for a quick, solid American lunch.';
+    // random pick from lunch spots
+    const lunch = ['Sahara (gyros, mezze — great patio)','Senor Mango\'s (casual Mexican, local fave)','Sukho Thai (get the yellow curry)','Pho Min (quick Vietnamese, always hits)','Urban Plates (healthy, easy, consistent)','The Friendly (neighborhood classic)','Dao Fu (solid Chinese, North Park)'];
+    return 'How about <b>' + lunch[Math.floor(Math.random() * lunch.length)] + '</b> for lunch?';
+  }
+
+  if (type === 'meal_dinner') {
+    const isEasy = /easy|quick|casual|simple|whatever|fast/.test(q);
+    if (isEasy) {
+      const dinner = ['Pho Min (Vietnamese — always reliable)','Fat Boy\'s (burgers, easy and local)','Cantina Mayahuel (great Mexican, North Park)','El Zarape (solid, fast Mexican)','Dao Fu (Chinese, low-key and good)','The Friendly (neighborhood pub food done right)','Nood Bar (ramen, cozy and quick)','Oscar\'s Mexican Seafood (fish tacos, casual)'];
+      return 'For an easy dinner: <b>' + dinner[Math.floor(Math.random() * dinner.length)] + '</b>.<br><br>All are local favorites and reliably great.';
+    }
+    const special = ['Bosforo — Mediterranean, intimate. <a href="https://www.exploretock.com/bosforo" target="_blank">Reserve here</a>','Wormwood — moody cocktail bar + food. <a href="https://www.wormwoodsd.com" target="_blank">Reserve here</a>','California English — lively and fun. <a href="https://www.resy.com" target="_blank">Reserve here</a>','Et Voila — French bistro, very romantic. <a href="https://www.exploretock.com/etvoila" target="_blank">Reserve here</a>','Haidilao Hot Pot — interactive and memorable. <a href="https://www.haidilao.com/us/" target="_blank">Reserve here</a>'];
+    return 'For a special dinner:<br><br><b>' + special[Math.floor(Math.random() * special.length)] + '</b>';
+  }
+
+  if (type === 'grocery') {
+    if (/sprouts/.test(q)) {
+      return 'At <b>Sprouts</b>, grab:<br><ul><li>Nectarines</li><li>Raspberries</li><li>Strawberries</li><li>Pears</li><li>Carrots</li><li>Berries (whatever looks good)</li><li>Fresh produce — Sprouts has better quality than most</li></ul>Also great for: hummus, specialty items, organic staples.';
+    }
+    if (/trader|tj|trader joe/.test(q)) {
+      return 'At <b>Trader Joe\'s</b>, focus on:<br><ul><li>Ready-made meals and frozen meals</li><li>Cauliflower gnocchi, orange chicken, other easy dinners</li><li>Soups and sauces</li><li>Snack crackers and cheese spreads</li><li>Flowers if you want bonus points 🌸</li></ul>';
+    }
+    if (/whole foods|whole/.test(q)) {
+      return 'At <b>Whole Foods</b>, grab:<br><ul><li>High-quality produce and fruit</li><li>Fresh meat from the butcher counter</li><li>Specialty cheeses and deli items</li><li>Anything organic you can\'t find elsewhere</li></ul>Good for a treat, not the weekly run — a bit pricier.';
+    }
+    if (/vons|ralphs|ralph/.test(q)) {
+      return 'At <b>Vons or Ralphs</b>, good for general shopping:<br><ul><li>Bread, sandwich meat, cheese</li><li>Milk, eggs, butter, yogurt</li><li>Peanut butter, jam, honey</li><li>Frozen chicken nuggets, breakfast sausage</li><li>Crackers, rice, pantry staples</li><li>Trash bags, paper towels, cleaning supplies if needed</li></ul>';
+    }
+    if (/costco/.test(q)) {
+      return 'At <b>Costco</b>, go big on:<br><ul><li>Paper towels and toilet paper in bulk</li><li>Eggs, butter, cheese in bulk</li><li>Chicken breast or ground beef (freeze the rest)</li><li>Crackers, nuts, snack packs</li><li>Laundry detergent or cleaning supplies</li><li>Dog treats if they have them</li></ul>Only worth the trip if stocking up on multiple things.';
+    }
+    return 'Which store? Options: Sprouts (produce/fruit), Trader Joe\'s (ready-made meals), Vons/Ralphs (general staples), Whole Foods (specialty/organic), or Costco (bulk).';
+  }
+
   if (type === 'date') {
     if (q.includes('birthday') || q.includes('anniversary') || q.includes('special')) {
       return `For something special, some great combos:<br><ul><li>Dinner at <b>Bosforo</b> + <a href="https://www.exploretock.com/bosforo" target="_blank">reserve here</a> + escape room after</li><li>Couples massage + dinner at <b>Wormwood</b></li><li>Dinner at <b>Et Voila</b> + dessert somewhere nearby</li><li>Korean head spa + dinner at <b>California English</b></li></ul><b>Tip:</b> If you need a reservation, book at least a few days ahead — her favorite spots fill up fast on weekends!`;
@@ -501,10 +577,12 @@ function askChat(text) {
   setTimeout(() => {
     document.getElementById('typing')?.remove();
     const result = findAnswer(text);
-    if (result && result.followupQ) {
-      addFollowupMsg(result.followupQ);
-    } else {
+    if (result && typeof result === 'object' && result.followupQ) {
+      addFollowupMsg(String(result.followupQ));
+    } else if (result && typeof result === 'string') {
       addMsg('bot', result);
+    } else {
+      addMsg('bot', 'Hmm, I didn\'t catch that. Try rephrasing?');
     }
   }, 400 + Math.random() * 300);
 }
