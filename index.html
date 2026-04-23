@@ -46,7 +46,8 @@ body { height: 100%; height: -webkit-fill-available; font-family: 'DM Sans', san
 
 /* PANELS */
 #panels { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; position: relative; }
-.panel { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+.panel { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
+#panel-stats { overflow-y: auto; }
 .panel.active { display: flex; }
 
 /* ALERT BAR */
@@ -121,7 +122,31 @@ body { height: 100%; height: -webkit-fill-available; font-family: 'DM Sans', san
 .bday-days.today { color: var(--teal); font-weight: 500; }
 .bday-reminder { font-size: 11px; color: var(--amber); margin-top: 2px; font-style: italic; }
 
-/* ══ CHORES ══ */
+/* ══ STATS ══ */
+#stats-panel { overflow-y: auto; padding: 14px; height: 100%; }
+.stats-section { margin-bottom: 20px; }
+.stats-heading { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.stats-heading::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.stat-card { background: var(--warm-white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 13px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
+.stat-card.unanswered { border-color: var(--amber); background: var(--amber-light); }
+.stat-bar-wrap { flex: 1; }
+.stat-q { font-size: 13px; color: var(--ink); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 240px; }
+.stat-card.unanswered .stat-q { color: var(--amber); }
+.stat-bar-bg { height: 4px; background: var(--border); border-radius: 999px; overflow: hidden; }
+.stat-bar-fill { height: 100%; background: var(--accent); border-radius: 999px; }
+.stat-card.unanswered .stat-bar-fill { background: var(--amber); }
+.stat-count { font-size: 13px; font-weight: 500; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+.stat-card.unanswered .stat-count { color: var(--amber); }
+.stats-empty { font-size: 13px; color: var(--muted); text-align: center; padding: 2rem 0; line-height: 1.6; }
+.stats-meta { font-size: 12px; color: var(--muted); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+.stats-clear { font-size: 12px; color: var(--muted); cursor: pointer; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); background: none; font-family: var(--font-sans, sans-serif); }
+.stats-clear:hover { color: var(--red, #D45050); border-color: var(--red, #D45050); }
+.stat-summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.stat-summary-card { background: var(--warm-white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; text-align: center; }
+.stat-summary-num { font-size: 22px; font-weight: 500; color: var(--accent); }
+.stat-summary-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ══ CHORES ══ *//* ══ CHORES ══ */
 #chores-panel { overflow-y: auto; padding: 14px; }
 .progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .progress-bar-outer { flex: 1; height: 5px; background: var(--border); border-radius: 999px; overflow: hidden; }
@@ -165,6 +190,8 @@ body { height: 100%; height: -webkit-fill-available; font-family: 'DM Sans', san
       <div class="tab active" onclick="switchTab('chat')">&#128172; Ask</div>
       <div class="tab" onclick="switchTab('bday')">&#127874; Birthdays</div>
       <div class="tab" onclick="switchTab('chores')">&#9989; Chores</div>
+      <div class="tab" onclick="switchTab('stats')">&#128202; Stats</div>
+      
     </div>
   </div>
 
@@ -211,6 +238,16 @@ body { height: 100%; height: -webkit-fill-available; font-family: 'DM Sans', san
       </div>
     </div>
 
+    <!-- STATS -->
+    <div class="panel" id="panel-stats">
+      <div id="stats-panel"></div>
+    </div>
+
+    <!-- STATS PANEL -->
+    <div class="panel" id="panel-stats">
+      <div id="stats-panel"></div>
+    </div>
+
   </div>
 </div>
 <script>
@@ -218,13 +255,14 @@ body { height: 100%; height: -webkit-fill-available; font-family: 'DM Sans', san
 // TABS
 // ======================================
 function switchTab(name) {
-  ['chat','bday','chores'].forEach((n,i) => {
+  ['chat','bday','chores','stats'].forEach((n,i) => {
     document.querySelectorAll('.tab')[i].classList.toggle('active', n === name);
   });
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
   if (name === 'bday') renderBday('all');
   if (name === 'chores') renderChores();
+  if (name === 'stats') renderStats();
 }
 
 // ======================================
@@ -300,8 +338,133 @@ function buildAlerts() {
 buildAlerts();
 
 // ======================================
-// CHAT KNOWLEDGE BASE
+// ANALYTICS
 // ======================================
+function loadLog() {
+  try { return JSON.parse(localStorage.getItem('askLog') || '[]'); } catch(e) { return []; }
+}
+function saveLog(log) {
+  try {
+    if (log.length > 500) log = log.slice(-500);
+    localStorage.setItem('askLog', JSON.stringify(log));
+  } catch(e) {}
+}
+function logToSheets(question, answered, result) {
+  try {
+    var snippet = (answered && typeof result === 'string') ? result.replace(/<[^>]*>/g, '').substring(0, 200) : '';
+    fetch('https://script.google.com/macros/s/AKfycbzIISPxFOiDqiB5r8g6Wj1nL_NRrE1ff-7fHavPpqFI_cNApUYHsNUl_H2JK6XBvww/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: question, answered: answered, matchedAnswer: snippet })
+    });
+  } catch(e) {}
+}
+
+function logQuestion(question, answered) {
+  var log = loadLog();
+  log.push({ q: question.toLowerCase().trim().slice(0, 120), answered: answered, ts: Date.now() });
+  saveLog(log);
+}
+function renderStats() {
+  var panel = document.getElementById('stats-panel');
+  var log = loadLog();
+  panel.innerHTML = '';
+  if (log.length === 0) {
+    panel.innerHTML = '<div class="stats-empty">No questions tracked yet!<br>Come back after Jason has used the bot for a bit. \uD83D\uDE0A<br><br><span style="font-size:11px">Questions are saved locally on this device.</span></div>';
+    return;
+  }
+  var total = log.length;
+  var answeredCount = log.filter(function(e) { return e.answered; }).length;
+  var unansweredCount = total - answeredCount;
+  var answerRate = Math.round((answeredCount / total) * 100);
+  var metaDiv = document.createElement('div');
+  metaDiv.className = 'stats-meta';
+  var oldest = new Date(log[0].ts);
+  metaDiv.innerHTML = '<span>Tracking since ' + oldest.toLocaleDateString() + '</span>';
+  var clearBtn = document.createElement('button');
+  clearBtn.className = 'stats-clear';
+  clearBtn.textContent = 'Clear data';
+  clearBtn.onclick = function() {
+    if (window.confirm('Clear all tracking data?')) { localStorage.removeItem('askLog'); renderStats(); }
+  };
+  metaDiv.appendChild(clearBtn);
+  panel.appendChild(metaDiv);
+  var grid = document.createElement('div');
+  grid.className = 'stat-summary-grid';
+  grid.innerHTML = '<div class="stat-summary-card"><div class="stat-summary-num">' + total + '</div><div class="stat-summary-label">questions asked</div></div>' +
+    '<div class="stat-summary-card"><div class="stat-summary-num">' + answerRate + '%</div><div class="stat-summary-label">answer rate</div></div>' +
+    '<div class="stat-summary-card"><div class="stat-summary-num" style="color:var(--amber)">' + unansweredCount + '</div><div class="stat-summary-label">unanswered</div></div>';
+  panel.appendChild(grid);
+  var tally = {};
+  log.forEach(function(entry) {
+    var q = entry.q;
+    if (!tally[q]) tally[q] = { count: 0, unanswered: 0 };
+    tally[q].count++;
+    if (!entry.answered) tally[q].unanswered++;
+  });
+  var sorted = Object.keys(tally).map(function(q) {
+    return { q: q, count: tally[q].count, unanswered: tally[q].unanswered };
+  }).sort(function(a, b) { return b.count - a.count; });
+  var maxCount = sorted.length > 0 ? sorted[0].count : 1;
+  var noAnswerList = sorted.filter(function(e) { return e.unanswered > 0; }).sort(function(a,b) { return b.unanswered - a.unanswered; });
+  if (noAnswerList.length > 0) {
+    var uSec = document.createElement('div');
+    uSec.className = 'stats-section';
+    var uHead = document.createElement('div');
+    uHead.className = 'stats-heading';
+    uHead.textContent = 'Questions with no answer';
+    uSec.appendChild(uHead);
+    var uNote = document.createElement('div');
+    uNote.style.cssText = 'font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5;';
+    uNote.textContent = 'These are things Jason asked that the bot couldn\'t answer. Consider adding them!';
+    uSec.appendChild(uNote);
+    noAnswerList.slice(0, 10).forEach(function(e) { uSec.appendChild(makeStatCard(e.q, e.unanswered, maxCount, true)); });
+    panel.appendChild(uSec);
+  }
+  var allSec = document.createElement('div');
+  allSec.className = 'stats-section';
+  var allHead = document.createElement('div');
+  allHead.className = 'stats-heading';
+  allHead.textContent = 'Most asked questions';
+  allSec.appendChild(allHead);
+  sorted.slice(0, 15).forEach(function(e) { allSec.appendChild(makeStatCard(e.q, e.count, maxCount, e.unanswered === e.count)); });
+  panel.appendChild(allSec);
+  var recSec = document.createElement('div');
+  recSec.className = 'stats-section';
+  var recHead = document.createElement('div');
+  recHead.className = 'stats-heading';
+  recHead.textContent = 'Recent questions';
+  recSec.appendChild(recHead);
+  log.slice(-10).reverse().forEach(function(entry) {
+    var card = document.createElement('div');
+    card.className = 'stat-card' + (entry.answered ? '' : ' unanswered');
+    var d = new Date(entry.ts);
+    var timeStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    card.innerHTML = '<div class="stat-bar-wrap"><div class="stat-q">' + escHtml(entry.q) + '</div><div style="font-size:11px;color:var(--muted)">' + timeStr + '</div></div>' +
+      '<div class="stat-count" style="font-size:16px">' + (entry.answered ? '\u2713' : '\u2753') + '</div>';
+    recSec.appendChild(card);
+  });
+  panel.appendChild(recSec);
+}
+function escHtml(str) { return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function makeStatCard(q, count, maxCount, isUnanswered) {
+  var card = document.createElement('div');
+  card.className = 'stat-card' + (isUnanswered ? ' unanswered' : '');
+  var barWrap = document.createElement('div'); barWrap.className = 'stat-bar-wrap';
+  var label = document.createElement('div'); label.className = 'stat-q'; label.title = q; label.textContent = q;
+  var barBg = document.createElement('div'); barBg.className = 'stat-bar-bg';
+  var barFill = document.createElement('div'); barFill.className = 'stat-bar-fill';
+  barFill.style.width = Math.round((count / maxCount) * 100) + '%';
+  barBg.appendChild(barFill); barWrap.appendChild(label); barWrap.appendChild(barBg);
+  var countEl = document.createElement('div'); countEl.className = 'stat-count'; countEl.textContent = count + 'x';
+  card.appendChild(barWrap); card.appendChild(countEl);
+  return card;
+}
+
+// ======================================
+// CHAT KNOWLEDGE BASE
+// ==============================================
 const KB = [
   { tags:['batteries','battery'], a:'In the <b>junk drawer in the kitchen</b>.' },
   { tags:['charger','chargers','cable','cables','cords','ring charger'], a:'Ring charger: <b>junk drawer</b>. Phone chargers: <b>next to the bed and each desk</b>. Extra cords/keyboards: <b>electronics box in the laundry room</b>.' },
@@ -570,6 +733,14 @@ function handleFollowup(type, q) {
   return "Not sure I caught that — want to try asking again?";
 }
 
+function isAnswered(result) {
+  if (!result) return false;
+  if (typeof result === 'object' && result.followupQ) return true;
+  if (typeof result !== 'string') return false;
+  var fallbacks = ['don\'t have that one', 'try asking', 'not in my database', 'try rephrasing', 'bermuda triangle'];
+  var lower = result.toLowerCase();
+  return !fallbacks.some(function(f) { return lower.includes(f); });
+}
 function askChat(text) {
   if (!text.trim()) return;
   addMsg('user', text);
@@ -577,6 +748,9 @@ function askChat(text) {
   setTimeout(() => {
     document.getElementById('typing')?.remove();
     const result = findAnswer(text);
+    // Track the question
+    logQuestion(text, isAnswered(result));
+    logToSheets(text, isAnswered(result), result);
     if (result && typeof result === 'object' && result.followupQ) {
       addFollowupMsg(String(result.followupQ));
     } else if (result && typeof result === 'string') {
