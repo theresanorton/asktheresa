@@ -188,7 +188,7 @@ body { height: 100%; height: -webkit-fill-available; font-family: 'DM Sans', san
     </div>
     <div id="tabs">
       <div class="tab active" onclick="switchTab('chat')">&#128172; Ask</div>
-      <div class="tab" onclick="switchTab('bday')">&#127874; Birthdays</div>
+      <div class="tab" onclick="switchTab('bday')">&#128197; Dates</div>
       <div class="tab" onclick="switchTab('chores')">&#9989; Chores</div>
       <div class="tab" onclick="switchTab('stats')">&#128202; Stats</div>
       
@@ -217,7 +217,8 @@ body { height: 100%; height: -webkit-fill-available; font-family: 'DM Sans', san
     <div class="panel" id="panel-bday">
       <div id="bday-panel">
         <div class="bday-filters">
-          <div class="bday-filter active" onclick="filterBday('all',this)">Everyone</div>
+          <div class="bday-filter active" onclick="filterBday('all',this)">All dates</div>
+          <div class="bday-filter" onclick="filterBday('special',this)">Special dates</div>
           <div class="bday-filter" onclick="filterBday('norton',this)">Norton family</div>
           <div class="bday-filter" onclick="filterBday('murray',this)">Murray family</div>
           <div class="bday-filter" onclick="filterBday('friends',this)">Friends</div>
@@ -314,24 +315,37 @@ function getDaysUntil(month, day) {
   return Math.ceil((next - today) / 86400000);
 }
 
+const SPECIAL_DATES = [
+  { name:"Valentine's Day", month:2, day:14, group:'special', rel:'Every year', icon:'&#10084;&#65039;' },
+  { name:'Our Anniversary', month:4, day:20, group:'special', rel:'Theresa & Jason', icon:'&#128141;' },
+  { name:"Mother's Day", month:5, day:10, group:'special', rel:'Second Sunday of May', icon:'&#127800;' },
+  { name:"Father's Day", month:6, day:15, group:'special', rel:'Third Sunday of June', icon:'&#128682;' },
+  { name:'Christmas', month:12, day:25, group:'special', rel:'Every year', icon:'&#127876;' },
+  { name:"Theresa's Birthday", month:11, day:30, group:'special', rel:'The most important day', icon:'&#127874;' },
+];
+
 function buildAlerts() {
-  const bar = document.getElementById('alert-bar');
+  var bar = document.getElementById('alert-bar');
   bar.innerHTML = '';
-  const items = [];
-  [...SPECIAL_EVENTS, ...FAMILY_BDAYS_FOR_ALERT.map(b => ({...b, type:'soon', isFamily:true}))].forEach(e => {
-    const d = getDaysUntil(e.month, e.day);
-    if (d <= 5) items.push({...e, d});
+  var items = [];
+  SPECIAL_DATES.forEach(function(e) {
+    var d = getDaysUntil(e.month, e.day);
+    if (d <= 14) items.push({ name: e.name, d: d, type: d === 0 ? 'urgent' : d <= 3 ? 'soon' : 'info' });
   });
-  items.sort((a,b) => a.d - b.d).slice(0, 3).forEach(e => {
-    const div = document.createElement('div');
-    const cls = e.d === 0 ? 'urgent' : e.d <= 2 ? 'soon' : 'info';
+  FAMILY_BDAYS_FOR_ALERT.forEach(function(e) {
+    var d = getDaysUntil(e.month, e.day);
+    if (d <= 5) items.push({ name: e.name, d: d, type: d === 0 ? 'urgent' : d <= 2 ? 'soon' : 'info' });
+  });
+  items.sort(function(a,b) { return a.d - b.d; }).slice(0, 3).forEach(function(e) {
+    var div = document.createElement('div');
+    var cls = e.d === 0 ? 'urgent' : e.d <= 2 ? 'soon' : 'info';
     div.className = 'alert-item ' + cls;
-    const icon = e.d === 0 ? '&#127881;' : e.d <= 2 ? '&#9201;' : '&#128197;';
-    const msg = e.d === 0
-      ? `Today is <b>${e.name}!</b>`
-      : e.d === 1 ? `<b>${e.name}</b> is tomorrow!`
-      : `<b>${e.name}</b> is in ${e.d} days`;
-    div.innerHTML = `<span style="font-size:14px">${icon}</span><span>${msg}</span>`;
+    var icon = e.d === 0 ? '&#127881;' : e.d <= 2 ? '&#9201;' : '&#128197;';
+    var msg = e.d === 0
+      ? 'Today is <b>' + e.name + '!</b>'
+      : e.d === 1 ? '<b>' + e.name + '</b> is tomorrow!'
+      : '<b>' + e.name + '</b> is in ' + e.d + ' days';
+    div.innerHTML = '<span style="font-size:14px">' + icon + '</span><span>' + msg + '</span>';
     bar.appendChild(div);
   });
 }
@@ -802,6 +816,7 @@ inputEl.addEventListener('input', () => { inputEl.style.height = 'auto'; inputEl
 // ======================================
 // BIRTHDAY DATA
 // ======================================
+
 const BDAYS = [
   { name:'Linda Norton', month:1, day:7, group:'norton', rel:'Theresa\'s mom' },
   { name:'Dave Murray', month:1, day:14, group:'murray', rel:'Jason\'s dad' },
